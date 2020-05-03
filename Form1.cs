@@ -99,9 +99,15 @@ namespace Snake
             //Load Snake Positions
             Position[] positions = snake.GetPositions();
             //Draw Snake
+            Color color;
             for (int i = 0; i < positions.Length; i++)
             {
-                Color color = ColorTranslator.FromHtml(util.ColorGradientBlue[i * (util.ColorGradientBlue.Length / positions.Length)]);
+                //check BodyLength
+                if (snake.GetBodyLength() < AllowJump)
+                    color = ColorTranslator.FromHtml(util.ColorGradientBlue[i * (util.ColorGradientBlue.Length / positions.Length)]);
+                else 
+                    color = ColorTranslator.FromHtml(util.ColorGradientGreen[i * (util.ColorGradientGreen.Length / positions.Length)]);
+
                 Brush brush = new SolidBrush(color);
 
                 e.Graphics.FillRectangle(   brush,
