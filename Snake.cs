@@ -15,13 +15,10 @@ namespace Snake
         private Position[] Body = new Position[3];
         private Position nextTile;
         private Form1 drawing;
-        //REPLACE SOON
-        private Controll controll;
 
-        public Snake(Form1 form, Controll cont)
+        public Snake(Form1 form)
         {
             drawing = form;
-            controll = cont;
 
             //Generate starting position
             this.Body[0] = Tuple.Create(3, form.GetTileamount() / 2);
@@ -35,7 +32,7 @@ namespace Snake
         }
 
         //moves Snake
-        public void move_Snake()
+        public bool move_Snake()
         {
             direction = drawing.getLastInput();
 
@@ -79,11 +76,12 @@ namespace Snake
             //Check Collision of snakes Head
             if (Collision(Body[0]))
             {
-                drawing.reset();
+                return false;
             }
 
             lastdirection = direction;
 
+            return true;
         }
 
         public Position[] GetPositions()
