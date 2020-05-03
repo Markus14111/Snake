@@ -101,15 +101,10 @@ namespace Snake
             //Draw Snake
             for (int i = 0; i < positions.Length; i++)
             {
-                //get Rectangle
-                Rectangle rec = new Rectangle(positions[i].Item1 * Tile_Size, positions[i].Item2 * Tile_Size, Tile_Size, Tile_Size);
-                //creates Brush with Gradient
-                LinearGradientBrush linGrBrush = new LinearGradientBrush(   rec, 
-                                                                            ColorTranslator.FromHtml(util.ColorGradientBlue[(i + 1) * (util.ColorGradientBlue.Length / positions.Length)]),
-                                                                            ColorTranslator.FromHtml(util.ColorGradientBlue[(i) * (util.ColorGradientBlue.Length / positions.Length)]),                                                                       
-                                                                            LinearGradientMode.Horizontal);
+                Color color = ColorTranslator.FromHtml(util.ColorGradientBlue[i * (util.ColorGradientBlue.Length / positions.Length)]);
+                Brush brush = new SolidBrush(color);
 
-                e.Graphics.FillRectangle(   linGrBrush,
+                e.Graphics.FillRectangle(   brush,
                                             positions[i].Item1 * Tile_Size,
                                             positions[i].Item2 * Tile_Size,
                                             Tile_Size,
