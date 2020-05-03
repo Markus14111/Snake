@@ -76,14 +76,6 @@ namespace Snake
             //Update Snake
             Body = temp;
             
-            //eat Food
-            if (Eaten())
-            {
-                //Generate new Food
-                controll.newFood();
-                //add Tile at Snakes End
-                addTile();
-            }
             //Check Collision of snakes Head
             if (Collision(Body[0]))
             {
@@ -116,7 +108,7 @@ namespace Snake
         }
 
         //adds Tile at the End of Snake
-        private void addTile()
+        public void addTile()
         {
             Position[] temp = new Position[Body.Length + 1];
 
@@ -149,14 +141,5 @@ namespace Snake
 
             return false;
         }
-        //returns true if snake hits foods position
-        private bool Eaten()
-        {
-            if ((Body[0].Item1 == controll.GetFoodPosition().Item1) && (Body[0].Item2 == controll.GetFoodPosition().Item2))
-                return true;
-
-            return false;
-        }
-
     }
 }

@@ -61,10 +61,28 @@ namespace Snake
             food = new Food(drawing, snake.GetPositions()); 
         }
 
+        //returns true if snake hits foods position
+        private bool Eaten()
+        {
+            if ((snake.GetPositions()[0].Item1 == food.getPosition().Item1) &&
+                (snake.GetPositions()[0].Item2 == food.getPosition().Item2))
+                return true;
+
+            return false;
+        }
+
         //Update snake every Tick 
         private void Tick(object myobject, EventArgs myEventArgs)
         {
             snake.move_Snake();
+            //eat Food
+            if (Eaten())
+            {
+                //Generate new Food
+                newFood();
+                //add Tile at Snakes End
+                snake.addTile();
+            }
             drawing.Refresh();
         }
     }
