@@ -118,9 +118,21 @@ namespace Snake
 
         public Position GetTileDirection(int i)
         {
+            //Head Tile
             if (i == 0)
                 return direction;
-            //if (i == Body.Length - 1)
+            //Last Tile
+            if (i == Body.Length - 1)
+            {
+                if (Body[i - 1].Item1 - 1 == Body[i].Item1)
+                    return Tuple.Create(+1, 0);
+                if (Body[i - 1].Item1 + 1 == Body[i].Item1)
+                    return Tuple.Create(-1, 0);
+                if (Body[i - 1].Item2 - 1 == Body[i].Item2)
+                    return Tuple.Create(0, 1);
+                if (Body[i - 1].Item2 - 1 == Body[i].Item2)
+                    return Tuple.Create(0, -1);
+            }
 
 
             // <---------
