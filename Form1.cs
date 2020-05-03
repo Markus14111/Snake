@@ -90,13 +90,13 @@ namespace Snake
         //store Last Input 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if ((e.KeyCode == Keys.W || e.KeyCode == Keys.Up) && (controll.GetSnakeRotation() != 'd'))
+            if (e.KeyCode == Keys.W || e.KeyCode == Keys.Up)
                 LastInput = 'u';
-            if ((e.KeyCode == Keys.A || e.KeyCode == Keys.Left) && (controll.GetSnakeRotation() != 'r'))
+            if (e.KeyCode == Keys.A || e.KeyCode == Keys.Left)
                 LastInput = 'l';
-            if ((e.KeyCode == Keys.S || e.KeyCode == Keys.Down) && (controll.GetSnakeRotation() != 'u'))
+            if (e.KeyCode == Keys.S || e.KeyCode == Keys.Down)
                 LastInput = 'd';
-            if ((e.KeyCode == Keys.D || e.KeyCode == Keys.Right) && (controll.GetSnakeRotation() != 'l'))
+            if (e.KeyCode == Keys.D || e.KeyCode == Keys.Right)
                 LastInput = 'r';
         }
         //Closes Exe correctely 

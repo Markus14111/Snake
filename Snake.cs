@@ -11,48 +11,55 @@ namespace Snake
 {
     class Snake
     {
-        private Position direction, lastdirection;
-        private Position[] Body = new Position[3];
+        private Position lastdirection;
         private Position nextTile;
+        private Position[] Body;
         private Form1 drawing;
 
-        public Snake(Form1 form)
+        private int AllowJump, TileAmount;
+
+        public Snake(Form1 form, int allow, int tile)
         {
             drawing = form;
+            AllowJump = allow;
+            TileAmount = tile;
+
 
             //Generate starting position
-            this.Body[0] = Tuple.Create(3, form.GetTileamount() / 2);
-            this.Body[1] = Tuple.Create(2, form.GetTileamount() / 2);
-            this.Body[2] = Tuple.Create(1, form.GetTileamount() / 2);
+            Body = new Position[3];
+            Body[0] = Tuple.Create(3, form.GetTileamount() / 2);
+            Body[1] = Tuple.Create(2, form.GetTileamount() / 2);
+            Body[2] = Tuple.Create(1, form.GetTileamount() / 2);
 
             //starting direction
-            this.direction = Tuple.Create(1, 0);
-            this.lastdirection = Tuple.Create(1, 0);
-
+            lastdirection = new Position(1, 0);
         }
 
         //moves Snake
-        public bool move_Snake()
+        public bool move_Snake(Position direction)
         {
-            direction = drawing.getLastInput();
+            //catch 180 degree turns
+            //if (Tuple.Create(-direction.Item1, -direction.Item2) == direction)
+                //direction = lastdirection;
 
             Position[] temp = new Position[Body.Length];
+
 
             //update Head Tile
             temp[0] = Tuple.Create(Body[0].Item1 + direction.Item1, Body[0].Item2 + direction.Item2);
 
             //allow screen jumping after certain Length
-            if (Body.Length >= drawing.GetAllowJump())
+            if (Body.Length >= AllowJump)
             {
                 //x jump
                 if (temp[0].Item1 < 0)
-                    temp[0] = Tuple.Create(drawing.GetTileamount() - 1, temp[0].Item2);
-                if (temp[0].Item1 > drawing.GetTileamount() - 1)
+                    temp[0] = Tuple.Create(TileAmount - 1, temp[0].Item2);
+                if (temp[0].Item1 > TileAmount - 1)
                     temp[0] = Tuple.Create(0, temp[0].Item2);
                 //y jump
                 if (temp[0].Item2 < 0)
-                    temp[0] = Tuple.Create(temp[0].Item1, drawing.GetTileamount() - 1);
-                if (temp[0].Item2 > drawing.GetTileamount() - 1)
+                    temp[0] = Tuple.Create(temp[0].Item1, TileAmount - 1);
+                if (temp[0].Item2 > TileAmount - 1)
                     temp[0] = Tuple.Create(temp[0].Item1, 0);
             }
 
@@ -87,22 +94,6 @@ namespace Snake
         public Position[] GetPositions()
         {
             return Body;
-        }
-        public char GetlastDirection()
-        {
-            char d = '.';
-
-            if (lastdirection.Item1 == 0 && lastdirection.Item2 == 1)
-                d = 'd';
-            if (lastdirection.Item1 == 0 && lastdirection.Item2 == -1)
-                d = 'u';
-            if (lastdirection.Item1 == 1 && lastdirection.Item2 == 0)
-                d = 'r';
-            if (lastdirection.Item1 == -1 && lastdirection.Item2 == 0)
-                d = 'l';
-
-
-            return d;
         }
 
         //adds Tile at the End of Snake

@@ -24,7 +24,7 @@ namespace Snake
             drawing = form1;
 
             //Create Snake and food
-            snake = new Snake(drawing);
+            snake = new Snake(drawing, drawing.GetAllowJump(), drawing.GetTileamount());
             food = new Food(drawing, snake.GetPositions());
 
             //Initilaze Timer
@@ -40,15 +40,12 @@ namespace Snake
 
         public Position[] GetSnakePosition() { return snake.GetPositions(); }
 
-        //REPLACE LATER
-        public char GetSnakeRotation() { return snake.GetlastDirection(); }
-
         //starts new Game
         public void reset()
         {
             Game_Timer.Stop();
             util.wait(1000);
-            snake = new Snake(drawing);
+            snake = new Snake(drawing, drawing.GetAllowJump(), drawing.GetTileamount());
             food = new Food(drawing, snake.GetPositions());
             drawing.Refresh();
             util.wait(2000);
@@ -74,7 +71,7 @@ namespace Snake
         //Update snake every Tick 
         private void Tick(object myobject, EventArgs myEventArgs)
         {
-            if (!snake.move_Snake())
+            if (!snake.move_Snake(drawing.getLastInput()))
             {
                 drawing.reset();
             }
