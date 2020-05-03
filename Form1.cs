@@ -13,30 +13,16 @@ namespace Snake
         private char LastInput = 'r';
         private int AllowJump = 10;
 
-        private System.Windows.Forms.Timer Game_Timer = new System.Windows.Forms.Timer();
-              
-        private Snake snake;
-        private Food food;
-
+        private Controll controll;
         public Form1()
         {
             InitializeComponent();
             DoubleBuffered = true;
 
+            controll = new Controll(this);
+
             //set WindowSize
             this.Size = new Size(CanvasSize + 16, CanvasSize + 39);
-
-            //Create Snake and food
-            snake = new Snake(this);
-            food = new Food(this, snake.GetPositions());
-
-            //Initilaze Timer
-            Game_Timer.Interval = (int)(1000/ 10);
-            Game_Timer.Tick += new EventHandler(Tick);
-            //start Timer
-            Game_Timer.Enabled = true;
-            Game_Timer.Start();
-
         }
 
 
@@ -64,46 +50,23 @@ namespace Snake
         {
             return AllowJump;
         }
-        public Position GetFoodposition()
-        {
-            return food.getPosition();
-        }
-        //starts new Game
+
         public void reset()
         {
-            Game_Timer.Stop();
-            util.wait(1000);
-            snake = new Snake(this);
-            food = new Food(this, snake.GetPositions());
-            Refresh();
-            util.wait(2000);
             LastInput = 'r';
-            Game_Timer.Start();
-
-        }
-        //creates new food
-        public void newFood()
-        {
-            food = new Food(this, snake.GetPositions());
-        }
-
-        //Update snake every Tick 
-        private void Tick(object myobject, EventArgs myEventArgs)
-        {
-                snake.move_Snake();
-                Refresh();
+            controll.reset();
         }
         //draws Snake and Food
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             //Load Snake Positions
-            Position[] positions = snake.GetPositions();
+            Position[] positions = controll.GetSnakePosition();
             //Draw Snake
             Color color;
             for (int i = 0; i < positions.Length; i++)
             {
                 //check BodyLength
-                if (snake.GetBodyLength() < AllowJump)
+                if (positions.Length < AllowJump)
                     color = ColorTranslator.FromHtml(util.ColorGradientBlue[i * (util.ColorGradientBlue.Length / positions.Length)]);
                 else 
                     color = ColorTranslator.FromHtml(util.ColorGradientGreen[i * (util.ColorGradientGreen.Length / positions.Length)]);
@@ -119,21 +82,21 @@ namespace Snake
 
             //Draw Food
             e.Graphics.FillRectangle(Brushes.Crimson,
-                                        food.getPosition().Item1 * Tile_Size,
-                                        food.getPosition().Item2 * Tile_Size,
+                                        controll.GetFoodPosition().Item1 * Tile_Size,
+                                        controll.GetFoodPosition().Item2 * Tile_Size,
                                         Tile_Size,
                                         Tile_Size);
         }
         //store Last Input 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if ((e.KeyCode == Keys.W || e.KeyCode == Keys.Up) && (snake.GetlastDirection() != 'd'))
+            if ((e.KeyCode == Keys.W || e.KeyCode == Keys.Up) && (controll.GetSnakeRotation() != 'd'))
                 LastInput = 'u';
-            if ((e.KeyCode == Keys.A || e.KeyCode == Keys.Left) && (snake.GetlastDirection() != 'r'))
+            if ((e.KeyCode == Keys.A || e.KeyCode == Keys.Left) && (controll.GetSnakeRotation() != 'r'))
                 LastInput = 'l';
-            if ((e.KeyCode == Keys.S || e.KeyCode == Keys.Down) && (snake.GetlastDirection() != 'u'))
+            if ((e.KeyCode == Keys.S || e.KeyCode == Keys.Down) && (controll.GetSnakeRotation() != 'u'))
                 LastInput = 'd';
-            if ((e.KeyCode == Keys.D || e.KeyCode == Keys.Right) && (snake.GetlastDirection() != 'l'))
+            if ((e.KeyCode == Keys.D || e.KeyCode == Keys.Right) && (controll.GetSnakeRotation() != 'l'))
                 LastInput = 'r';
         }
         //Closes Exe correctely 

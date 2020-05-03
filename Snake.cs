@@ -15,10 +15,13 @@ namespace Snake
         private Position[] Body = new Position[3];
         private Position nextTile;
         private Form1 drawing;
+        //REPLACE SOON
+        private Controll controll;
 
-        public Snake(Form1 form)
+        public Snake(Form1 form, Controll cont)
         {
             drawing = form;
+            controll = cont;
 
             //Generate starting position
             this.Body[0] = Tuple.Create(3, form.GetTileamount() / 2);
@@ -77,7 +80,7 @@ namespace Snake
             if (Eaten())
             {
                 //Generate new Food
-                drawing.newFood();
+                controll.newFood();
                 //add Tile at Snakes End
                 addTile();
             }
@@ -110,10 +113,6 @@ namespace Snake
 
 
             return d;
-        }
-        public int GetBodyLength()
-        {
-            return Body.Length;
         }
 
         //adds Tile at the End of Snake
@@ -153,7 +152,7 @@ namespace Snake
         //returns true if snake hits foods position
         private bool Eaten()
         {
-            if ((Body[0].Item1 == drawing.GetFoodposition().Item1) && (Body[0].Item2 == drawing.GetFoodposition().Item2))
+            if ((Body[0].Item1 == controll.GetFoodPosition().Item1) && (Body[0].Item2 == controll.GetFoodPosition().Item2))
                 return true;
 
             return false;
