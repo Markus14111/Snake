@@ -17,11 +17,11 @@ namespace Snake
 
 
 
-        public Food(Form1 form, Position[] blockedPositions)
+        public Food(int Tileamount, Position[] blockedPositions)
         {
             while (blocked)
             {
-                position = Tuple.Create(random.Next(0, form.GetTileamount()), random.Next(0, form.GetTileamount()));
+                position = Tuple.Create(random.Next(0, Tileamount), random.Next(0, Tileamount));
                 if (!is_blocked(position, blockedPositions)) { blocked = false; }
             }
         }
@@ -33,14 +33,15 @@ namespace Snake
 
         private bool is_blocked(Position position, Position[] blockedPosition)
         {
+            
             foreach (Position snakeposition in blockedPosition)
             {
-                if ((position.Item1 == snakeposition.Item1) && (position.Item2 == snakeposition.Item2)) 
+                if (position.Equals(snakeposition))
+                {
                     return true;
+                }
             }
-
             return false;
         }
-
     }
 }

@@ -14,22 +14,19 @@ namespace Snake
         private Position lastdirection;
         private Position nextTile;
         private Position[] Body;
-        private Form1 drawing;
 
         private int AllowJump, TileAmount;
 
-        public Snake(Form1 form, int allow, int tile)
+        public Snake(int allow, int tile)
         {
-            drawing = form;
             AllowJump = allow;
             TileAmount = tile;
 
-
             //Generate starting position
             Body = new Position[3];
-            Body[0] = Tuple.Create(3, form.GetTileamount() / 2);
-            Body[1] = Tuple.Create(2, form.GetTileamount() / 2);
-            Body[2] = Tuple.Create(1, form.GetTileamount() / 2);
+            Body[0] = Tuple.Create(3, TileAmount / 2);
+            Body[1] = Tuple.Create(2, TileAmount / 2);
+            Body[2] = Tuple.Create(1, TileAmount / 2);
 
             //starting direction
             lastdirection = new Position(1, 0);
@@ -39,11 +36,10 @@ namespace Snake
         public bool move_Snake(Position direction)
         {
             //catch 180 degree turns
-            //if (Tuple.Create(-direction.Item1, -direction.Item2) == direction)
-                //direction = lastdirection;
+            if (direction.Equals(Tuple.Create(-lastdirection.Item1, -lastdirection.Item2)))
+                direction = lastdirection;
 
             Position[] temp = new Position[Body.Length];
-
 
             //update Head Tile
             temp[0] = Tuple.Create(Body[0].Item1 + direction.Item1, Body[0].Item2 + direction.Item2);
@@ -64,18 +60,13 @@ namespace Snake
             }
 
             //shift rest of Body
-            for (int i = 0; i <= Body.Length - 1; i++)
+            for (int i = 0; i < Body.Length - 1; i++)
             {
-                //store possible next Tile
-                if (i == Body.Length - 1)
-                {
-                    nextTile = Body[i];
-                    continue;
-                }
-
                 //shift
                 temp[i + 1] = Body[i];
             }
+
+            nextTile = Body[Body.Length-1];
 
             //Update Snake
             Body = temp;
@@ -112,12 +103,12 @@ namespace Snake
         private bool Collision(Position Head)
         {
             //Border hit for Snakes Lentgh < 50
-            if (Body.Length < drawing.GetAllowJump())
+            if (Body.Length < AllowJump)
             {
                 //Snake ot ouf Border
-                if (Head.Item1 < 0 || Head.Item1 > drawing.GetTileamount() - 1)
+                if (Head.Item1 < 0 || Head.Item1 > TileAmount - 1)
                     return true;
-                if (Head.Item2 < 0 || Head.Item2 > drawing.GetTileamount() - 1)
+                if (Head.Item2 < 0 || Head.Item2 > TileAmount - 1)
                     return true;
             }
                          

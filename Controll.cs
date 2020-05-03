@@ -24,8 +24,8 @@ namespace Snake
             drawing = form1;
 
             //Create Snake and food
-            snake = new Snake(drawing, drawing.GetAllowJump(), drawing.GetTileamount());
-            food = new Food(drawing, snake.GetPositions());
+            snake = new Snake(drawing.GetAllowJump(), drawing.GetTileamount());
+            food = new Food(drawing.GetTileamount(), snake.GetPositions());
 
             //Initilaze Timer
             Game_Timer.Interval = (int)(1000 / 10);
@@ -45,17 +45,17 @@ namespace Snake
         {
             Game_Timer.Stop();
             util.wait(1000);
-            snake = new Snake(drawing, drawing.GetAllowJump(), drawing.GetTileamount());
-            food = new Food(drawing, snake.GetPositions());
+            snake = new Snake(drawing.GetAllowJump(), drawing.GetTileamount());
+            food = new Food(drawing.GetTileamount(), snake.GetPositions());
             drawing.Refresh();
             util.wait(2000);
             Game_Timer.Start();
         }
 
         //creates new food
-        public void newFood() 
-        { 
-            food = new Food(drawing, snake.GetPositions()); 
+        private void newFood() 
+        {
+            food = new Food(drawing.GetTileamount(), snake.GetPositions());
         }
 
         //returns true if snake hits foods position
