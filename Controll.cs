@@ -17,6 +17,7 @@ namespace Snake
         private Form1 drawing;
         private Snake snake;
         private Food food;
+        private AI ai;
 
         public Controll(Form1 form1)
         {
@@ -26,6 +27,7 @@ namespace Snake
             //Create Snake and food
             snake = new Snake(drawing.GetAllowJump(), drawing.GetTileamount());
             food = new Food(drawing.GetTileamount(), snake.GetPositions());
+            ai = new AI();
 
             //Initilaze Timer
             Game_Timer.Interval = (int)(1000 / 10);
@@ -71,7 +73,8 @@ namespace Snake
         //Update snake every Tick 
         private void Tick(object myobject, EventArgs myEventArgs)
         {
-            if (!snake.move_Snake(drawing.getLastInput()))
+            //if (!snake.move_Snake(drawing.getLastInput()))
+            if (!snake.move_Snake(ai.RandomInput()))
             {
                 drawing.reset();
             }
