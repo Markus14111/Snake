@@ -33,8 +33,8 @@ namespace Snake
             Game_Timer.Interval = (int)(1000 / 10);
             Game_Timer.Tick += new EventHandler(Tick);
             //start Timer
-            //Game_Timer.Enabled = true;
-            //Game_Timer.Start();
+            Game_Timer.Enabled = true;
+            Game_Timer.Start();
         }
 
         //----------------- GETTER -------------------
@@ -75,7 +75,7 @@ namespace Snake
         private void Tick(object myobject, EventArgs myEventArgs)
         {
             //if (!snake.move_Snake(drawing.getLastInput()))
-            if (!snake.move_Snake(ai.RandomInput()))
+            if (!snake.move_Snake(ai.RandomInput(snake.GetPositions()[0],food.getPosition())))
             {
                 drawing.reset();
             }
