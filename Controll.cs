@@ -27,14 +27,14 @@ namespace Snake
             //Create Snake and food
             snake = new Snake(drawing.GetAllowJump(), drawing.GetTileamount());
             food = new Food(drawing.GetTileamount(), snake.GetPositions());
-            ai = new AI();
+            ai = new AI(drawing.GetAllowJump(), drawing.GetTileamount());
 
             //Initilaze Timer
             Game_Timer.Interval = (int)(1000 / 10);
             Game_Timer.Tick += new EventHandler(Tick);
             //start Timer
-            Game_Timer.Enabled = true;
-            Game_Timer.Start();
+            //Game_Timer.Enabled = true;
+            //Game_Timer.Start();
         }
 
         //----------------- GETTER -------------------
@@ -49,6 +49,7 @@ namespace Snake
             util.wait(1000);
             snake = new Snake(drawing.GetAllowJump(), drawing.GetTileamount());
             food = new Food(drawing.GetTileamount(), snake.GetPositions());
+            ai = new AI(drawing.GetAllowJump(), drawing.GetTileamount());
             drawing.Refresh();
             util.wait(2000);
             Game_Timer.Start();
