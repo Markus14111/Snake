@@ -90,7 +90,9 @@ namespace Snake
 
         }
 
-        private void run_AI() {
+        private Position run_AI() {
+
+            int Length, move_count = 0;
 
             while (true)
             {
@@ -99,6 +101,8 @@ namespace Snake
                 {
                     drawing.SetLastInput(Tuple.Create(1, 0));
                     reset(0);
+                    Length = snake.GetPositions().Length;
+
                     break;
                 }
                 //eat Food
@@ -109,8 +113,13 @@ namespace Snake
                     //add Tile at Snakes End
                     snake.addTile();
                 }
+
+                move_count++;
+
             }
-            
+
+            return Tuple.Create(Length, move_count);
+
         }
 
     }
