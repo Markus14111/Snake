@@ -22,15 +22,6 @@ namespace Snake
             //set WindowSize
             this.Size = new Size(CanvasSize + 16, CanvasSize + 39);
 
-            int[] test = new int[3];
-            test[0] = 0;
-            test[1] = 1;
-            test[2] = 2;
-
-            Array.Sort(test);
-
-            for (int i = 0; i < 3; i++)
-                Console.WriteLine(test[i]);
         }
 
         public Position GetLastInput()

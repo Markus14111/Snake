@@ -43,20 +43,12 @@ namespace Snake
 
             int cycles = 10;
 
+            //set Random
+            for (int i = 0; i < 20; i++)
+                Students[i] = Randomize();
+
             for (int i = 0; i < cycles; i++)
-            {
-                if (i == 1)
-                {
-                    //set Random
-                    for (int j = 0; j < 20; j++)
-                        Students[i] = Randomize();                       
-                }
-                else
-                {
-                    //call BuilderBot
-                    Students = BuilderBot(Top3);
-                }
-                
+            {                
                 //Run and Teach
                 for (int j = 0; j < Students.Length; j++)
                     ValueIndexPair[j] = Tuple.Create(TeacherBot(Students[j]), j);
@@ -68,6 +60,9 @@ namespace Snake
                 Top3 = new Dataset[3];
                 for (int j = 0; j < 3; j++)
                     Top3[j] = Students[ValueIndexPair[19 - j].Item2];
+
+                //call BuilderBot
+                Students = BuilderBot(Top3);
 
             }
 
