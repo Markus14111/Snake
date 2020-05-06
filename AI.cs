@@ -1,5 +1,7 @@
 ﻿using System;
+
 using Position = System.Tuple<int, int>;
+using Dataset = System.Tuple<double[,], double[,], double[,], double[], double[], double[]>;
 
 namespace Snake
 {

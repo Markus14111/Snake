@@ -32,7 +32,6 @@ namespace Snake
             //start Timer
             Game_Timer.Enabled = true;
             Game_Timer.Start();
-            Network test = new Network();
         }
 
         //----------------- GETTER -------------------
@@ -122,7 +121,7 @@ namespace Snake
 
         }
 
-        private int TeacherBot(DataSet student)
+        private int TeacherBot(Dataset student)
         {
 
 
