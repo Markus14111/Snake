@@ -54,7 +54,7 @@ namespace Snake
                 else
                 {
                     //call BuilderBot
-                    Students = Builderbot(Top3);
+                    Students = BuilderBot(Top3);
                 }
                 
                 //Run and Teach
