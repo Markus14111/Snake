@@ -24,6 +24,9 @@ namespace Snake
             //set pointer to form1
             drawing = form1;
 
+            //Set starting direction to right
+            drawing.SetLastInput(Tuple.Create(1, 0));
+
             //Create Snake and food
             snake = new Snake(drawing.GetAllowJump(), drawing.GetTileamount());
             food = new Food(drawing.GetTileamount(), snake.GetPositions());
