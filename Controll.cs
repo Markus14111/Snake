@@ -25,7 +25,7 @@ namespace Snake
             snake = new Snake(drawing.GetTileamount());
             food = new Food(drawing.GetTileamount(), snake.GetPositions());
             ai = new AI(this, drawing.GetTileamount());
-
+            ai.Learning();
             //Initilaze Timer
             Game_Timer.Interval = (int)(1000 / 50);
             Game_Timer.Tick += new EventHandler(Tick);

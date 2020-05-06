@@ -23,7 +23,6 @@ namespace Snake
 
         public Network()
         {
-            Randomize();
         }
 
         //math functions missing in c#

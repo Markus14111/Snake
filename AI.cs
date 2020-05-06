@@ -4,6 +4,7 @@ using Position = System.Tuple<int, int>;
 using Dataset = System.Tuple<double[,], double[,], double[,], double[], double[], double[]>;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Snake
 {
@@ -16,12 +17,15 @@ namespace Snake
         private Network student;
         private Controll controller;
         private int MutationRate = 5;
+        private int ClassSize = 200;
+        private int cycleSize = 200;
 
         public AI(Controll controller, int TileAmount)
         {
             this.controller = controller;
             this.TileAmount = TileAmount;
             student = new Network();
+            
         }
 
 
@@ -37,14 +41,14 @@ namespace Snake
 
         public void Learning()
         {            
-            Dataset[] Students = new Dataset[20];
-            Position[] ValueIndexPair = new Position[20];
+            Dataset[] Students = new Dataset[ClassSize];
+            Position[] ValueIndexPair = new Position[ClassSize];
             Dataset[] Top3 = new Dataset[3];
 
-            int cycles = 10;
+            int cycles = cycleSize;
 
             //set Random
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 200; i++)
                 Students[i] = Randomize();
 
             for (int i = 0; i < cycles; i++)
@@ -63,9 +67,8 @@ namespace Snake
 
                 //call BuilderBot
                 Students = BuilderBot(Top3);
-
             }
-
+            student.setValues(Top3[0]);
         }
 
         private Dataset Randomize()
@@ -203,8 +206,8 @@ namespace Snake
         {
             //randomly crossbreed 2 winners
             Random rand = new Random();
-            Dataset[] output = new Dataset[20];
-            for (int i = 0; i < 20; i++)
+            Dataset[] output = new Dataset[ClassSize];
+            for (int i = 0; i < ClassSize; i++)
             {
                 Dataset Child = breed(winners[rand.Next(3)], winners[rand.Next(3)]);
                 //apply mutation
@@ -216,7 +219,7 @@ namespace Snake
         private double[,] replaceLine(double[,] array, double[,] copyfrom, int line)
         {
             for (int i = 0; i < array.GetUpperBound(1) + 1; i++)
-                array[i, line] = copyfrom[i, line];
+                array[line,i] = copyfrom[line,i];
 
             return array;
         }
