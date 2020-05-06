@@ -122,5 +122,13 @@ namespace Snake
 
         }
 
+        private int TeacherBot(DataSet student)
+        {
+
+
+
+            return 0;
+        }
+
     }
 }
