@@ -80,7 +80,9 @@ namespace Snake
         private void Tick(object myobject, EventArgs myEventArgs)
         {
             //if (!snake.move_Snake(ai.RandomInput(snake.GetPositions()[0], food.getPosition())))
-            if (!snake.move_Snake(drawing.GetLastInput()))
+            Position move = ai.GetInput(snake.GetPositions(), food.getPosition());
+            Console.WriteLine(move);
+            if (!snake.move_Snake(move));
             {
                 drawing.SetLastInput(Tuple.Create(1, 0));
                 reset();
@@ -99,7 +101,7 @@ namespace Snake
 
         private void run_AI() {
 
-            if (!snake.move_Snake(ai.RandomInput(snake.GetPositions()[0], food.getPosition())))            
+            if (!snake.move_Snake(ai.GetInput(snake.GetPositions(), food.getPosition())))            
             {
                 drawing.SetLastInput(Tuple.Create(1, 0));
                 reset();

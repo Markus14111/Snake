@@ -16,82 +16,20 @@ namespace Snake
 
         private int AllowJump, TileAmount;
         private int lastRotation;
+        private Network testnet;
 
         public AI(int Allowjump, int Tileamount)
         {
             AllowJump = Allowjump;
             TileAmount = Tileamount;
+            testnet = new Network();
         }
 
-        //returns direction of next move
-        public Position RandomInput(Position position, Position food)
+        public Position GetInput(Position[] pos, Position food_pos)
         {
-            //take direction closest to food
-            int closestFood = -1;
-            int rotation = 0;
-            for (int i = 0; i < 4; i++)
-            {
-                int fooddistance = FoodDistance(position, food, i);
-                if (fooddistance > closestFood)
-                {
-                    closestFood = fooddistance;
-                    rotation = i;
-                }
-            }
-            //if snake wants to go backwards, make one turn right
-            if ((rotation + 2) % 4 == lastRotation)
-            {
-                lastRotation = (rotation + 1) % 4;
-                return Direction[lastRotation];
-            }
-
-            lastRotation = rotation;
-            return Direction[rotation];
+            int result = testnet.run(CreateInputs(pos, food_pos));
+            return Direction[result];
         }
-
-        private int FoodDistance(Position position, Position food, int direction)
-        {
-            //assigns distance (negative value if food not in this direction)
-            int distance = 0;
-            switch (direction)
-            {
-                case 0:
-                    distance = position.Item2 - food.Item2;
-                    break;
-                case 1:
-                    distance = food.Item1 - position.Item1;
-                    break;
-                case 2:
-                    distance = food.Item2 - position.Item2;
-                    break;
-                case 3:
-                    distance = position.Item1 - food.Item1;
-                    break;
-            }
-            //negative sign means no food found in this direction
-            if (Math.Sign(distance) == -1)
-                return -1;
-            else
-                return distance;
-        }
-
-        private int BorderDistance(Position position, int direction)
-        {
-            switch (direction)
-            {
-                case 0:
-                    return position.Item2;
-                case 1:
-                    return TileAmount - position.Item1;
-                case 2:
-                    return TileAmount - position.Item2;
-                case 3:
-                    return position.Item1;
-            }
-            return 0;
-        }
-
-
 
         public double[] CreateInputs(Position[] pos, Position food_position)
         {
