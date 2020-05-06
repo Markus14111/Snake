@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Position = System.Tuple<int, int>;
 
 namespace Snake
@@ -14,14 +8,12 @@ namespace Snake
 
         static Position[] Direction = { Tuple.Create(0, -1), Tuple.Create(1, 0), Tuple.Create(0, 1), Tuple.Create(-1, 0), Tuple.Create(1,-1), Tuple.Create(1,1), Tuple.Create(-1, 1), Tuple.Create(-1, -1) };
 
-        private int AllowJump, TileAmount;
-        private int lastRotation;
+        private int TileAmount;
         private Network testnet;
 
         public AI(int Allowjump, int Tileamount)
         {
-            AllowJump = Allowjump;
-            TileAmount = Tileamount;
+            this.TileAmount = Tileamount;
             testnet = new Network();
         }
 
@@ -118,10 +110,6 @@ namespace Snake
             }
 
             return 0;
-        }
-        private double Sigmoid(double n)
-        {
-            return 1 / (1 + Math.Exp(-n));
         }
     }
 }

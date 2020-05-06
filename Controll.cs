@@ -1,11 +1,5 @@
-﻿using Snake;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows.Forms;
-using System.Xml.Serialization;
 using Position = System.Tuple<int, int>;
 
 namespace Snake
@@ -82,7 +76,7 @@ namespace Snake
             //if (!snake.move_Snake(ai.RandomInput(snake.GetPositions()[0], food.getPosition())))
             Position move = ai.GetInput(snake.GetPositions(), food.getPosition());
             Console.WriteLine(move);
-            if (!snake.move_Snake(move));
+            if (!snake.move_Snake(move))
             {
                 drawing.SetLastInput(Tuple.Create(1, 0));
                 reset();
