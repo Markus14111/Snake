@@ -89,7 +89,7 @@ namespace Snake
 
         }
 
-        private Position run_AI() {
+        public Position run_AI() {
 
             int Length, move_count = 0;
 
@@ -121,13 +121,6 @@ namespace Snake
 
         }
 
-        private int TeacherBot(Dataset student)
-        {
-
-
-
-            return 0;
-        }
 
     }
 }
