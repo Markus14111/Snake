@@ -10,9 +10,11 @@ namespace Snake
 
         private int TileAmount;
         private Network testnet;
+        private Controll controller;
 
-        public AI(int TileAmount)
+        public AI(Controll controller, int TileAmount)
         {
+            this.controller = controller;
             this.TileAmount = TileAmount;
             testnet = new Network();
         }
