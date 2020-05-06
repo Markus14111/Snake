@@ -10,7 +10,7 @@ namespace Snake
     {
         private int CanvasSize = 600;
         private int Tile_Size = 30;
-        private char LastInput = 'r';
+        private Position LastInput = Tuple.Create(1, 0);
         private int AllowJump = 10;
 
         private Controll controll;
@@ -27,21 +27,14 @@ namespace Snake
 
 
 
-        public Position getLastInput()
+        public Position GetLastInput()
         {
-            Position direction = Tuple.Create(0, 0);
-
-            if (LastInput == 'r')
-                direction = Tuple.Create(1, 0);
-            if (LastInput == 'l')
-                direction = Tuple.Create(-1, 0);
-            if (LastInput == 'u')
-                direction = Tuple.Create(0, -1);
-            if (LastInput == 'd')
-                direction = Tuple.Create(0, 1);
-
-            return direction;
-        }        
+            return LastInput;
+        }
+        public void SetLastInput(Position LastInput)
+        {
+            this.LastInput = LastInput;
+        }
         public int GetTileamount()
         {
             return (CanvasSize / Tile_Size);
@@ -51,11 +44,6 @@ namespace Snake
             return AllowJump;
         }
 
-        public void reset()
-        {
-            LastInput = 'r';
-            controll.reset();
-        }
         //draws Snake and Food
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
@@ -91,13 +79,13 @@ namespace Snake
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.W || e.KeyCode == Keys.Up)
-                LastInput = 'u';
+                LastInput = Tuple.Create(0, -1);
             if (e.KeyCode == Keys.A || e.KeyCode == Keys.Left)
-                LastInput = 'l';
+                LastInput = Tuple.Create(-1, 0);
             if (e.KeyCode == Keys.S || e.KeyCode == Keys.Down)
-                LastInput = 'd';
+                LastInput = Tuple.Create(0, 1);
             if (e.KeyCode == Keys.D || e.KeyCode == Keys.Right)
-                LastInput = 'r';
+                LastInput = Tuple.Create(1, 0);
         }
         //Closes Exe correctely 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)

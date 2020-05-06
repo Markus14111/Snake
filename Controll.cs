@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using System.Xml.Serialization;
 using Position = System.Tuple<int, int>;
 
 namespace Snake
@@ -38,7 +38,7 @@ namespace Snake
         }
 
         //----------------- GETTER -------------------
-        public Position GetFoodPosition()  { return food.getPosition(); }
+        public Position GetFoodPosition() { return food.getPosition(); }
 
         public Position[] GetSnakePosition() { return snake.GetPositions(); }
 
@@ -52,11 +52,12 @@ namespace Snake
             ai = new AI(drawing.GetAllowJump(), drawing.GetTileamount());
             drawing.Refresh();
             util.wait(2000);
+            drawing.SetLastInput(Tuple.Create(1, 0));
             Game_Timer.Start();
         }
 
         //creates new food
-        private void newFood() 
+        private void newFood()
         {
             food = new Food(drawing.GetTileamount(), snake.GetPositions());
         }
@@ -74,10 +75,11 @@ namespace Snake
         //Update snake every Tick 
         private void Tick(object myobject, EventArgs myEventArgs)
         {
-            //if (!snake.move_Snake(drawing.getLastInput()))
-            if (!snake.move_Snake(ai.RandomInput(snake.GetPositions()[0],food.getPosition())))
+            //if (!snake.move_Snake(ai.RandomInput(snake.GetPositions()[0], food.getPosition())))
+            if (!snake.move_Snake(drawing.GetLastInput()))
             {
-                drawing.reset();
+                drawing.SetLastInput(Tuple.Create(1, 0));
+                reset();
             }
             //eat Food
             if (Eaten())
@@ -89,5 +91,26 @@ namespace Snake
             }
             drawing.Refresh();
         }
+
+        private void run_AI() {
+
+            if (!snake.move_Snake(ai.RandomInput(snake.GetPositions()[0], food.getPosition())))            
+            {
+                drawing.SetLastInput(Tuple.Create(1, 0));
+                reset();
+            }
+            //eat Food
+            if (Eaten())
+            {
+                //Generate new Food
+                newFood();
+                //add Tile at Snakes End
+                snake.addTile();
+            }
+            drawing.Refresh();
+
+
+        }
+
     }
 }
