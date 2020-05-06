@@ -94,13 +94,6 @@ namespace Snake
                 snake.addTile();
             }
             drawing.Refresh();
-            /*
-            double[] test = ai.CreateInputs(snake.GetPositions(), food.getPosition());
-            Application.DoEvents();
-            for (int i = 0; i < 24; i++)
-                Console.WriteLine(test[i]);
-            Console.WriteLine("----------");
-            */
 
         }
 

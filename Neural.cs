@@ -21,7 +21,6 @@ namespace Snake
         public Network()
         {
             Randomize();
-            Console.WriteLine(run(new double[24]));
         }
 
         //math functions missing in c#
