@@ -3,6 +3,7 @@
 using Position = System.Tuple<int, int>;
 using Dataset = System.Tuple<double[,], double[,], double[,], double[], double[], double[]>;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 namespace Snake
 {
@@ -31,7 +32,80 @@ namespace Snake
             int fitness = Values.Item1 + Values.Item2;
 
             return fitness;
+        }
 
+        public void Learning()
+        {            
+            Dataset[] Students = new Dataset[20];
+            Position[] ValueIndexPair = new Position[20];
+            Dataset[] Top3 = new Dataset[3];
+
+            int cycles = 10;
+
+            for (int i = 0; i < cycles; i++)
+            {
+                if (i == 1)
+                {
+                    //set Random
+                    for (int j = 0; j < 20; j++)
+                        Students[i] = Randomize();                       
+                }
+                else
+                {
+                    //call BuilderBot
+                    Students = Builderbot(Top3);
+                }
+                
+                //Run and Teach
+                for (int j = 0; j < Students.Length; j++)
+                    ValueIndexPair[j] = Tuple.Create(TeacherBot(Students[j]), j);
+
+                //Sort Students
+                Array.Sort(ValueIndexPair);
+
+                //Take top 3
+                Top3 = new Dataset[3];
+                for (int j = 0; j < 3; j++)
+                    Top3[j] = Students[ValueIndexPair[19 - j].Item2];
+
+            }
+
+        }
+
+        private Dataset Randomize()
+        {
+            double[,] Weights0 = new double[18, 24];
+            double[,] Weights1 = new double[18, 18];
+            double[,] Weights2 = new double[4, 18];
+
+            double[] Offset0 = new double[18];
+            double[] Offset1 = new double[18];
+            double[] Offset2 = new double[4];
+
+            Random rand = new Random();
+            for (int m = 0; m < Weights0.GetUpperBound(0) + 1; m++)
+            {
+                for (int n = 0; n < Weights0.GetUpperBound(1) + 1; n++)
+                    Weights0[m, n] = (rand.Next(20) + 1) / 10;
+            }
+            for (int m = 0; m < Weights1.GetUpperBound(0) + 1; m++)
+            {
+                for (int n = 0; n < Weights1.GetUpperBound(1) + 1; n++)
+                    Weights1[m, n] = (rand.Next(20) + 1) / 10;
+            }
+            for (int m = 0; m < Weights2.GetUpperBound(0) + 1; m++)
+            {
+                for (int n = 0; n < Weights2.GetUpperBound(1) + 1; n++)
+                    Weights2[m, n] = (rand.Next(20) + 1) / 10;
+            }
+            for (int i = 0; i < Offset0.Length; i++)
+                Offset0[i] = (rand.Next(20) + 1) / 10;
+            for (int i = 0; i < Offset1.Length; i++)
+                Offset1[i] = (rand.Next(20) + 1) / 10;
+            for (int i = 0; i < Offset2.Length; i++)
+                Offset2[i] = (rand.Next(20) + 1) / 10;
+
+            return Tuple.Create(Weights0, Weights1, Weights2, Offset0, Offset1, Offset2);
         }
 
         public Position GetInput(Position[] pos, Position food_pos)
