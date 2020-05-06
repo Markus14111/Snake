@@ -21,7 +21,6 @@ namespace Snake
 
             //set WindowSize
             this.Size = new Size(CanvasSize + 16, CanvasSize + 39);
-
         }
 
         public Position GetLastInput()
