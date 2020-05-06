@@ -86,24 +86,24 @@ namespace Snake
             for (int m = 0; m < Weights0.GetUpperBound(0)+1; m++)
             {
                 for (int n = 0; n < Weights0.GetUpperBound(1) + 1; n++)
-                    Weights0[m, n] = 2 / (rand.Next(20) + 1);
+                    Weights0[m, n] = 10 / (rand.Next(20) + 1);
             }
             for (int m = 0; m < Weights1.GetUpperBound(0) + 1; m++)
             {
                 for (int n = 0; n < Weights1.GetUpperBound(1) + 1; n++)
-                    Weights1[m, n] = 2 / (rand.Next(20) + 1);
+                    Weights1[m, n] = 10 / (rand.Next(20) + 1);
             }
             for (int m = 0; m < Weights2.GetUpperBound(0) + 1; m++)
             {
                 for (int n = 0; n < Weights2.GetUpperBound(1) + 1; n++)
-                    Weights2[m, n] = 2 / (rand.Next(20)+1);
+                    Weights2[m, n] = 10 / (rand.Next(20)+1);
             }
             for (int i = 0; i < Offset0.Length; i++)
-                Offset0[i] = 2 / (rand.Next(20) + 1);
+                Offset0[i] = 10 / (rand.Next(20) + 1);
             for (int i = 0; i < Offset1.Length; i++)
-                Offset1[i] = 2 / (rand.Next(20) + 1);
+                Offset1[i] = 10 / (rand.Next(20) + 1);
             for (int i = 0; i < Offset2.Length; i++)
-                Offset2[i] = 2 / (rand.Next(20) + 1);
+                Offset2[i] = 10 / (rand.Next(20) + 1);
         }
     }
 }

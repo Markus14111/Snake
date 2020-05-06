@@ -46,8 +46,7 @@ namespace Snake
             Game_Timer.Stop();
             util.wait(1000);
             snake = new Snake(drawing.GetAllowJump(), drawing.GetTileamount());
-            food = new Food(drawing.GetTileamount(), snake.GetPositions());
-            ai = new AI(drawing.GetAllowJump(), drawing.GetTileamount());
+            food = new Food(drawing.GetTileamount(), snake.GetPositions());           
             drawing.Refresh();
             util.wait(2000);
             drawing.SetLastInput(Tuple.Create(1, 0));
