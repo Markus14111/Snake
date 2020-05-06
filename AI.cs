@@ -93,9 +93,16 @@ namespace Snake
 
 
 
-        public double[] CreateInputs(Position[] positions, Position food_position)
+        public double[] CreateInputs(Position[] pos, Position food_position)
         {
-            Position Head = positions[0];
+            Position Head = Tuple.Create(pos[0].Item1, pos[0].Item2);
+            Position[] positions = new Position[pos.Length];
+            for(int i = 0; i < positions.Length; i++)
+            {
+                positions[i] = Tuple.Create(pos[i].Item1, pos[i].Item2);
+            }
+
+
             double[] Outputs = new double[24];
 
             //looks in 8 Direction
@@ -103,19 +110,19 @@ namespace Snake
             for(int i = 0; i < Outputs.Length; i += 3)
             {
                 //Wall
-                Outputs[i] = Sigmoid(DistanceToWall(Head, Direction[n]));
-                
+                Outputs[i] = DistanceToWall(Head, Direction[n]) / TileAmount;
+
                 //Body
                 if (DistanceToBody(positions, Direction[n]) == 0)
                     Outputs[i + 1] = 0;
                 else
-                    Outputs[i + 1] = Sigmoid(DistanceToBody(positions, Direction[n]));
+                    Outputs[i + 1] = DistanceToBody(positions, Direction[n]) / TileAmount;
 
                 //Food
                 if (DistanceToFood(Head, Direction[n], food_position) == 0)
                     Outputs[i + 2] = 0;
                 else
-                    Outputs[i + 2] = Sigmoid(DistanceToFood(Head, Direction[n], food_position));
+                    Outputs[i + 2] = DistanceToFood(Head, Direction[n], food_position) / TileAmount;
 
                 n++;
             }

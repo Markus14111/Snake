@@ -11,7 +11,7 @@ namespace Snake
         private int CanvasSize = 600;
         private int Tile_Size = 30;
         private Position LastInput = Tuple.Create(1, 0);
-        private int AllowJump = 10;
+        private int AllowJump;
 
         private Controll controll;
         public Form1()
@@ -19,14 +19,15 @@ namespace Snake
             InitializeComponent();
             DoubleBuffered = true;
 
+            //AllowJump
+            AllowJump = (CanvasSize / Tile_Size) ^ 2 + 1;
+
             controll = new Controll(this);
 
             //set WindowSize
             this.Size = new Size(CanvasSize + 16, CanvasSize + 39);
 
         }
-
-
 
         public Position GetLastInput()
         {
@@ -54,12 +55,7 @@ namespace Snake
             Color color;
             for (int i = 0; i < positions.Length; i++)
             {
-                //check BodyLength
-                if (positions.Length < AllowJump)
-                    color = ColorTranslator.FromHtml(util.ColorGradientBlue[i * (util.ColorGradientBlue.Length / positions.Length)]);
-                else 
-                    color = ColorTranslator.FromHtml(util.ColorGradientGreen[i * (util.ColorGradientGreen.Length / positions.Length)]);
-
+                color = ColorTranslator.FromHtml(util.ColorGradientGreen[i * (util.ColorGradientGreen.Length / positions.Length)]);
                 Brush brush = new SolidBrush(color);
 
                 e.Graphics.FillRectangle(   brush,
