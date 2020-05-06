@@ -74,7 +74,7 @@ namespace Snake
         {
             //if (!snake.move_Snake(ai.RandomInput(snake.GetPositions()[0], food.getPosition())))
             Position move = ai.GetInput(snake.GetPositions(), food.getPosition());
-            Console.WriteLine(move);
+
             if (!snake.move_Snake(move))
             {
                 drawing.SetLastInput(Tuple.Create(1, 0));
