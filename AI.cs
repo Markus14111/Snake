@@ -48,7 +48,7 @@ namespace Snake
             int cycles = cycleSize;
 
             //set Random
-            for (int i = 0; i < 200; i++)
+            for (int i = 0; i < ClassSize; i++)
                 Students[i] = Randomize();
 
             for (int i = 0; i < cycles; i++)
