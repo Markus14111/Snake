@@ -27,7 +27,7 @@ namespace Snake
             ai = new AI(drawing.GetTileamount());
 
             //Initilaze Timer
-            Game_Timer.Interval = (int)(1000 / 100);
+            Game_Timer.Interval = (int)(1000 / 10);
             Game_Timer.Tick += new EventHandler(Tick);
             //start Timer
             Game_Timer.Enabled = true;
@@ -44,11 +44,11 @@ namespace Snake
         public void reset()
         {
             Game_Timer.Stop();
-            //util.wait(1000);
+            util.wait(1000);
             snake = new Snake(drawing.GetTileamount());
             food = new Food(drawing.GetTileamount(), snake.GetPositions());           
             drawing.Refresh();
-            //util.wait(2000);
+            util.wait(2000);
             drawing.SetLastInput(Tuple.Create(1, 0));
             Game_Timer.Start();
         }
@@ -62,8 +62,7 @@ namespace Snake
         //returns true if snake hits foods position
         private bool Eaten()
         {
-            if ((snake.GetPositions()[0].Item1 == food.getPosition().Item1) &&
-                (snake.GetPositions()[0].Item2 == food.getPosition().Item2))
+            if (snake.GetPositions()[0].Equals(food.getPosition()))
                 return true;
 
             return false;
