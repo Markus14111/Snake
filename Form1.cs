@@ -10,16 +10,12 @@ namespace Snake
         private int CanvasSize = 600;
         private int Tile_Size = 30;
         private Position LastInput = Tuple.Create(1, 0);
-        private int AllowJump;
 
         private Controll controll;
         public Form1()
         {
             InitializeComponent();
             DoubleBuffered = true;
-
-            //AllowJump
-            AllowJump = (CanvasSize / Tile_Size) ^ 2 + 1;
 
             controll = new Controll(this);
 
@@ -39,10 +35,6 @@ namespace Snake
         public int GetTileamount()
         {
             return (CanvasSize / Tile_Size);
-        }
-        public int GetAllowJump()
-        {
-            return AllowJump;
         }
 
         //draws Snake and Food

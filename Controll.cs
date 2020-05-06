@@ -22,9 +22,9 @@ namespace Snake
             drawing.SetLastInput(Tuple.Create(1, 0));
 
             //Create Snake and food
-            snake = new Snake(drawing.GetAllowJump(), drawing.GetTileamount());
+            snake = new Snake(drawing.GetTileamount());
             food = new Food(drawing.GetTileamount(), snake.GetPositions());
-            ai = new AI(drawing.GetAllowJump(), drawing.GetTileamount());
+            ai = new AI(drawing.GetTileamount());
 
             //Initilaze Timer
             Game_Timer.Interval = (int)(1000 / 10);
@@ -45,7 +45,7 @@ namespace Snake
         {
             Game_Timer.Stop();
             util.wait(1000);
-            snake = new Snake(drawing.GetAllowJump(), drawing.GetTileamount());
+            snake = new Snake(drawing.GetTileamount());
             food = new Food(drawing.GetTileamount(), snake.GetPositions());           
             drawing.Refresh();
             util.wait(2000);

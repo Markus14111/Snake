@@ -9,11 +9,10 @@ namespace Snake
         private Position nextTile;
         private Position[] Body;
 
-        private int AllowJump, TileAmount;
+        private int TileAmount;
 
-        public Snake(int allow, int tile)
+        public Snake(int tile)
         {
-            AllowJump = allow;
             TileAmount = tile;
 
             //Generate starting position
@@ -37,22 +36,7 @@ namespace Snake
 
             //update Head Tile
             temp[0] = Tuple.Create(Body[0].Item1 + direction.Item1, Body[0].Item2 + direction.Item2);
-
-            //allow screen jumping after certain Length
-            if (Body.Length >= AllowJump)
-            {
-                //x jump
-                if (temp[0].Item1 < 0)
-                    temp[0] = Tuple.Create(TileAmount - 1, temp[0].Item2);
-                if (temp[0].Item1 > TileAmount - 1)
-                    temp[0] = Tuple.Create(0, temp[0].Item2);
-                //y jump
-                if (temp[0].Item2 < 0)
-                    temp[0] = Tuple.Create(temp[0].Item1, TileAmount - 1);
-                if (temp[0].Item2 > TileAmount - 1)
-                    temp[0] = Tuple.Create(temp[0].Item1, 0);
-            }
-
+         
             //shift rest of Body
             for (int i = 0; i < Body.Length - 1; i++)
             {
@@ -93,23 +77,20 @@ namespace Snake
 
             Body = temp;
         }
+
         //returns true if Collision
         private bool Collision(Position Head)
         {
-            //Border hit for Snakes Lentgh < 50
-            if (Body.Length < AllowJump)
-            {
-                //Snake ot ouf Border
-                if (Head.Item1 < 0 || Head.Item1 > TileAmount - 1)
-                    return true;
-                if (Head.Item2 < 0 || Head.Item2 > TileAmount - 1)
-                    return true;
-            }
+            //Snake ot ouf Border
+            if (Head.Item1 < 0 || Head.Item1 > TileAmount - 1)
+                return true;
+            if (Head.Item2 < 0 || Head.Item2 > TileAmount - 1)
+                return true;
                          
             //Snake hits Itself
             for (int i = 1; i < Body.Length; i++)
             {
-                if ((Head.Item1 == Body[i].Item1) && (Head.Item2 == Body[i].Item2))
+                if (Head.Equals(Body[i]))
                     return true;
             }
 

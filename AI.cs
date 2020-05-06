@@ -11,7 +11,7 @@ namespace Snake
         private int TileAmount;
         private Network testnet;
 
-        public AI(int Allowjump, int Tileamount)
+        public AI(int Tileamount)
         {
             this.TileAmount = Tileamount;
             testnet = new Network();
