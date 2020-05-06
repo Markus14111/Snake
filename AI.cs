@@ -2,6 +2,7 @@
 
 using Position = System.Tuple<int, int>;
 using Dataset = System.Tuple<double[,], double[,], double[,], double[], double[], double[]>;
+using System.Runtime.InteropServices;
 
 namespace Snake
 {
@@ -11,17 +12,31 @@ namespace Snake
         static Position[] Direction = { Tuple.Create(0, -1), Tuple.Create(1, 0), Tuple.Create(0, 1), Tuple.Create(-1, 0), Tuple.Create(1,-1), Tuple.Create(1,1), Tuple.Create(-1, 1), Tuple.Create(-1, -1) };
 
         private int TileAmount;
-        private Network testnet;
+        private Network student;
+        private Controll controller;
 
-        public AI(int TileAmount)
+        public AI(Controll controller, int TileAmount)
         {
+            this.controller = controller;
             this.TileAmount = TileAmount;
-            testnet = new Network();
+            student = new Network();
+        }
+
+
+        public int TeacherBot(Dataset dataset)
+        {
+            student.setValues(dataset);
+            Position Values = controller.run_AI();
+
+            int fitness = Values.Item1 + Values.Item2;
+
+            return fitness;
+
         }
 
         public Position GetInput(Position[] pos, Position food_pos)
         {
-            int result = testnet.run(CreateInputs(pos, food_pos));
+            int result = student.run(CreateInputs(pos, food_pos));
             return Direction[result];
         }
 
