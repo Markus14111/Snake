@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
+using Dataset = System.Tuple<double[,], double[,], double[,], double[], double[], double[]>;
+
 namespace Snake
 {
     class Network
@@ -107,5 +109,19 @@ namespace Snake
                 Offset2[i] = (rand.Next(20) + 1) / 10;
         }
 
+        public void setValues(Dataset data)
+        {
+            Weights0 = data.Item1;
+            Weights1 = data.Item2;
+            Weights2 = data.Item3;
+            Offset0 = data.Item4;
+            Offset1 = data.Item5;
+            Offset2 = data.Item6;
+        }
+
+        public Dataset getValues()
+        {
+            return Tuple.Create(Weights0, Weights1, Weights2, Offset0, Offset1, Offset2);
+        }
     }
 }
