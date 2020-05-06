@@ -113,6 +113,31 @@ namespace Snake
 
             return 0;
         }
+
+        private Dataset[] BuilderBot(Dataset[] winners)
+        {
+            //randomly crossbreed 2 winners
+            Random rand = new Random();
+            Dataset[] output = new Dataset[20];
+            for (int i = 0; i < 20; i++)
+            {
+                Dataset Child = breed(winners[rand.Next(3)], winners[rand.Next(3)]);
+                //apply mutation
+                output[i] = mutation(Child);
+            }
+            return output;
+        }
+
+        private Dataset breed(Dataset mother, Dataset father)
+        {
+            //crossbreeds the 2 neural networks
+            return mother;
+        }
+
+        private Dataset mutation(Dataset Child)
+        {
+            return Child;
+        }
     }
 }
 

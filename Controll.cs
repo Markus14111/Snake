@@ -120,14 +120,5 @@ namespace Snake
             return Tuple.Create(Length, move_count);
 
         }
-
-        private int TeacherBot(Dataset student)
-        {
-
-
-
-            return 0;
-        }
-
     }
 }
