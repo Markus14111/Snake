@@ -18,10 +18,10 @@ namespace Snake
         private int TileAmount;
         private Network student;
         private Controll controller;
-        private int MutationRate = 25;
+        private int MutationRate = 70;
         private int ClassSize = 500;
         private int cycleSize = 100;
-        private int GamesPerSnake = 10;
+        private int GamesPerSnake = 5;
         private string[] path = new string[3];
 
         public AI(Controll controller, int TileAmount)
@@ -39,7 +39,7 @@ namespace Snake
             student.setValues(dataset);
             Position Values = controller.run_AI();
 
-            int fitness = Values.Item1*150 + Values.Item2;
+            int fitness = Values.Item1*200 + Values.Item2;
 
             return fitness;
         }

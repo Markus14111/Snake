@@ -91,7 +91,7 @@ namespace Snake
 
         public Position run_AI() {
 
-            int Length = 0, move_count = 0;
+            int Length = 0, move_count = 0, starve = 0;
 
             while (true)
             {
@@ -111,14 +111,18 @@ namespace Snake
                     newFood();
                     //add Tile at Snakes End
                     snake.addTile();
+                    //reset Hunger
+                    starve = 0;
                 }
 
                 move_count++;
+                starve++;
 
                 //return after termination condition
-                if (move_count > 200)
+                if (move_count > 2000)
                     return Tuple.Create(Length, move_count);
-
+                if (starve > 100)
+                    return Tuple.Create(Length, move_count);
 
             }
 
