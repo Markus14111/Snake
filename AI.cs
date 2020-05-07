@@ -18,8 +18,8 @@ namespace Snake
         private int TileAmount;
         private Network student;
         private Controll controller;
-        private int MutationRate = 70;
-        private int ClassSize = 10000;
+        private int MutationRate = 10;
+        private int ClassSize = 5000;
         private int cycleSize = 10;
         private int GamesPerSnake = 5;
         private string[] path = new string[10];
@@ -36,12 +36,15 @@ namespace Snake
 
         public int TeacherBot(Dataset dataset)
         {
+            int fitness = 0;
             student.setValues(dataset);
-            Position Values = controller.run_AI();
-
-            int fitness = Values.Item1*200 + Values.Item2;
-
-            return fitness;
+            //n Games per Student
+            for (int k = 0; k < GamesPerSnake; k++)
+            {
+                Position Values = controller.run_AI();
+                fitness += Values.Item1 * 200 + Values.Item2;
+            }
+            return Convert.ToInt32(fitness / GamesPerSnake); ;
         }
 
         public void Learning()
@@ -73,15 +76,9 @@ namespace Snake
             for (int i = 0; i < cycles; i++)
             {
                 //Run and Teach
-                int Value;
                 for (int j = 0; j < Students.Length; j++)
                 {
-                    Value = 0;
-                    //n Games per Student
-                    for(int k = 0; k < GamesPerSnake; k++)
-                        Value += Tuple.Create(TeacherBot(Students[j]), j).Item1;
-
-                    ValueIndexPair[j] = Tuple.Create(Value / GamesPerSnake, j);
+                    ValueIndexPair[j] = Tuple.Create(Tuple.Create(TeacherBot(Students[j]), j).Item1, j);
                 }
 
 
