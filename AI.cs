@@ -27,11 +27,11 @@ namespace Snake
         public AI(Controll controller, int TileAmount)
         {
             for (int i = 0; i < path.Length; i++)
-                path[i] = ".\\Dataset" + i + ".txt";
+                path[i] = ".\\Dataset" + i.ToString() + ".txt";
 
             this.controller = controller;
             this.TileAmount = TileAmount;
-            student = new Network();
+            student = new Network();1
         }
 
         public int TeacherBot(Dataset dataset)
