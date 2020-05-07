@@ -100,7 +100,7 @@ namespace Snake
                 {
                     drawing.SetLastInput(Tuple.Create(1, 0));
                     reset(0);
-                    Length = snake.GetPositions().Length;
+                    Length = snake.GetPositions().Length - 3;
 
                     break;
                 }

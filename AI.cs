@@ -19,8 +19,8 @@ namespace Snake
         private Network student;
         private Controll controller;
         private int MutationRate = 70;
-        private int ClassSize = 500;
-        private int cycleSize = 100;
+        private int ClassSize = 10000;
+        private int cycleSize = 10;
         private int GamesPerSnake = 5;
         private string[] path = new string[3];
 
@@ -48,17 +48,17 @@ namespace Snake
         {            
             Dataset[] Students = new Dataset[ClassSize];
             Position[] ValueIndexPair = new Position[ClassSize];
-            Dataset[] Top3 = new Dataset[3];
+            Dataset[] Top = new Dataset[10];
             int first = -1;
             int cycles = cycleSize;
 
             //if there is a file with saved AI load it
             if (File.Exists(path[0]))
             {
-                Top3 = new Dataset[3];
+                Top = new Dataset[10];
                 for (int i = 0; i < 3; i++)
-                    Top3[i] = ReadFromFile(i);
-                Students = BuilderBot(Top3);
+                    Top[i] = ReadFromFile(i);
+                Students = BuilderBot(Top);
                 Console.WriteLine("Loaded DataSets");
             }
             else 
@@ -87,29 +87,29 @@ namespace Snake
 
                 //Sort Students
                 Array.Sort(ValueIndexPair);
-                //Console.WriteLine(ValueIndexPair[ClassSize-1].Item1);
+                Console.WriteLine(ValueIndexPair[ClassSize-1].Item1);
 
                 if (first == -1)
                     first = ValueIndexPair[ClassSize - 1].Item1;
 
                 //Take top 3
-                Top3 = new Dataset[3];
-                for (int j = 0; j < 3; j++)
-                    Top3[j] = Students[ValueIndexPair[ClassSize - 1 - j].Item2];
+                Top = new Dataset[10];
+                for (int j = 0; j < 10; j++)
+                    Top[j] = Students[ValueIndexPair[ClassSize - 1 - j].Item2];
 
                 //call BuilderBot
-                Students = BuilderBot(Top3);
+                Students = BuilderBot(Top);
 
-                Console.WriteLine(i + 1);
+                //Console.WriteLine(i + 1);
 
             }
 
-            student.setValues(Top3[0]);
+            student.setValues(Top[0]);
             
-            if (TeacherBot(Top3[0]) >= first)
+            if (TeacherBot(Top[0]) >= first)
             {
                 for (int i = 0; i < 3; i++)
-                    WriteToFile(Top3[i], i);
+                    WriteToFile(Top[i], i);
                 Console.WriteLine("New DataSet written");
             }                
             else
@@ -252,13 +252,13 @@ namespace Snake
             //randomly crossbreed 2 winners
             Random rand = new Random();
             Dataset[] output = new Dataset[ClassSize];
-            for (int i = 3; i < ClassSize; i++)
+            for (int i = 10; i < ClassSize; i++)
             {
-                Dataset Child = breed(winners[rand.Next(3)], winners[rand.Next(3)]);
+                Dataset Child = breed(winners[rand.Next(10)], winners[rand.Next(10)]);
                 //apply mutation
                 output[i] = mutation(Child);
             }
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 10; i++)
                 output[i] = winners[i];
             return output;
         }
