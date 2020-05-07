@@ -18,9 +18,9 @@ namespace Snake
         private int TileAmount;
         private Network student;
         private Controll controller;
-        private int MutationRate = 40;
-        private int ClassSize = 200;
-        private int cycleSize = 1000;
+        private int MutationRate = 25;
+        private int ClassSize = 500;
+        private int cycleSize = 100;
         private int GamesPerSnake = 10;
         private string[] path = new string[3];
 
@@ -39,7 +39,7 @@ namespace Snake
             student.setValues(dataset);
             Position Values = controller.run_AI();
 
-            int fitness = Values.Item1*50 + Values.Item2;
+            int fitness = Values.Item1*150 + Values.Item2;
 
             return fitness;
         }
@@ -100,7 +100,7 @@ namespace Snake
                 //call BuilderBot
                 Students = BuilderBot(Top3);
 
-                Console.WriteLine(i + 1 + "- " + first);
+                Console.WriteLine(i + 1);
 
             }
 

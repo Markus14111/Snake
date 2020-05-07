@@ -116,7 +116,7 @@ namespace Snake
                 move_count++;
 
                 //return after termination condition
-                if (move_count > 1000)
+                if (move_count > 200)
                     return Tuple.Create(Length, move_count);
 
 
