@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using Position = System.Tuple<int, int>;
+using Dataset = System.Tuple<double[,], double[,], double[,], double[], double[], double[]>;
 
 namespace Snake
 {
@@ -77,6 +78,10 @@ namespace Snake
         //Closes Exe correctely 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            Dataset[] LastTop = controll.GetAI().GetTop();
+            for (int i = 0; i < LastTop.Length; i++)
+                controll.GetAI().WriteToFile(LastTop[i], i);
+
             Environment.Exit(0);
         }
     }

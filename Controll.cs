@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Position = System.Tuple<int, int>;
 
+
 namespace Snake
 {
     class Controll
@@ -36,8 +37,11 @@ namespace Snake
 
         //----------------- GETTER -------------------
         public Position GetFoodPosition() { return food.getPosition(); }
-
         public Position[] GetSnakePosition() { return snake.GetPositions(); }
+        public AI GetAI()
+        {
+            return ai;
+        }
 
         //starts new Game
         public void reset(int n)

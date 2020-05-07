@@ -18,11 +18,12 @@ namespace Snake
         private int TileAmount;
         private Network student;
         private Controll controller;
-        private int MutationRate = 10;
-        private int ClassSize = 5000;
+        private int MutationRate = 50;
+        private int ClassSize = 20000;
         private int cycleSize = 10;
         private int GamesPerSnake = 5;
         private string[] path = new string[10];
+        private Dataset[] Top;
 
         public AI(Controll controller, int TileAmount)
         {
@@ -34,7 +35,12 @@ namespace Snake
             student = new Network();
         }
 
-        public int TeacherBot(Dataset dataset)
+
+        public Dataset[] GetTop()
+        {
+            return Top;
+        }
+        private int TeacherBot(Dataset dataset)
         {
             int fitness = 0;
             student.setValues(dataset);
@@ -51,7 +57,7 @@ namespace Snake
         {            
             Dataset[] Students = new Dataset[ClassSize];
             Position[] ValueIndexPair = new Position[ClassSize];
-            Dataset[] Top = new Dataset[10];
+            Top = new Dataset[10];
             int first = -1;
             int cycles = cycleSize;
 
@@ -410,7 +416,7 @@ namespace Snake
             return Tuple.Create(Weights0, Weights1, Weights2, Offset0, Offset1, Offset2);
         }
 
-        private void WriteToFile(Dataset input,int number)
+        public void WriteToFile(Dataset input,int number)
         {
             int length = input.Item1.Length + input.Item2.Length + input.Item3.Length +
                          input.Item4.Length + input.Item5.Length + input.Item6.Length + 1;
