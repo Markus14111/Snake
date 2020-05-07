@@ -31,7 +31,7 @@ namespace Snake
 
             this.controller = controller;
             this.TileAmount = TileAmount;
-            student = new Network();1
+            student = new Network();
         }
 
         public int TeacherBot(Dataset dataset)
@@ -56,7 +56,7 @@ namespace Snake
             if (File.Exists(path[0]))
             {
                 Top = new Dataset[10];
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < path.Length; i++)
                     Top[i] = ReadFromFile(i);
                 Students = BuilderBot(Top);
                 Console.WriteLine("Loaded DataSets");
@@ -108,7 +108,7 @@ namespace Snake
             
             if (TeacherBot(Top[0]) >= first)
             {
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < path.Length; i++)
                     WriteToFile(Top[i], i);
                 Console.WriteLine("New DataSet written");
             }                
