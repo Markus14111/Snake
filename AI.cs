@@ -22,16 +22,16 @@ namespace Snake
         private int ClassSize = 5000;
         private int cycleSize = 10;
         private int GamesPerSnake = 5;
-        private string[] path = new string[3];
+        private string[] path = new string[10];
 
         public AI(Controll controller, int TileAmount)
         {
-            path[0] = @".\Dataset0.txt";
-            path[1] = @".\Dataset1.txt";
-            path[2] = @".\Dataset2.txt";
+            for (int i = 0; i < path.Length; i++)
+                path[i] = ".\\Dataset" + i.ToString() + ".txt";
+
             this.controller = controller;
             this.TileAmount = TileAmount;
-            student = new Network();
+            student = new Network();1
         }
 
         public int TeacherBot(Dataset dataset)
