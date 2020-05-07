@@ -18,9 +18,10 @@ namespace Snake
         private int TileAmount;
         private Network student;
         private Controll controller;
-        private int MutationRate = 15;
-        private int ClassSize = 500;
-        private int cycleSize = 10;
+        private int MutationRate = 40;
+        private int ClassSize = 200;
+        private int cycleSize = 1000;
+        private int GamesPerSnake = 10;
         private string[] path = new string[3];
 
         public AI(Controll controller, int TileAmount)
@@ -50,6 +51,7 @@ namespace Snake
             Dataset[] Top3 = new Dataset[3];
             int first = -1;
             int cycles = cycleSize;
+
             //if there is a file with saved AI load it
             if (File.Exists(path[0]))
             {
@@ -57,20 +59,36 @@ namespace Snake
                 for (int i = 0; i < 3; i++)
                     Top3[i] = ReadFromFile(i);
                 Students = BuilderBot(Top3);
+                Console.WriteLine("Loaded DataSets");
             }
-            else  //randomize
+            else 
+            {
+                //randomize
                 for (int i = 0; i < ClassSize; i++)
-                 Students[i] = Randomize();
+                    Students[i] = Randomize();
+                Console.WriteLine("Random Seed Generated");
+
+            }
 
             for (int i = 0; i < cycles; i++)
-            {                
+            {
                 //Run and Teach
+                int Value;
                 for (int j = 0; j < Students.Length; j++)
-                    ValueIndexPair[j] = Tuple.Create(TeacherBot(Students[j]), j);
+                {
+                    Value = 0;
+                    //n Games per Student
+                    for(int k = 0; k < GamesPerSnake; k++)
+                        Value += Tuple.Create(TeacherBot(Students[j]), j).Item1;
+
+                    ValueIndexPair[j] = Tuple.Create(Value / GamesPerSnake, j);
+                }
+
 
                 //Sort Students
                 Array.Sort(ValueIndexPair);
-                Console.WriteLine(ValueIndexPair[ClassSize-1].Item1);
+                //Console.WriteLine(ValueIndexPair[ClassSize-1].Item1);
+
                 if (first == -1)
                     first = ValueIndexPair[ClassSize - 1].Item1;
 
@@ -81,13 +99,21 @@ namespace Snake
 
                 //call BuilderBot
                 Students = BuilderBot(Top3);
+
+                Console.WriteLine(i + 1 + "- " + first);
+
             }
+
             student.setValues(Top3[0]);
+            
             if (TeacherBot(Top3[0]) >= first)
-                for (int i = 0; i<3; i++)
+            {
+                for (int i = 0; i < 3; i++)
                     WriteToFile(Top3[i], i);
+                Console.WriteLine("New DataSet written");
+            }                
             else
-                Console.WriteLine("FAIL");
+                Console.WriteLine("Failed Writing");
         }
 
         private Dataset Randomize()
@@ -390,7 +416,7 @@ namespace Snake
         private void WriteToFile(Dataset input,int number)
         {
             int length = input.Item1.Length + input.Item2.Length + input.Item3.Length +
-                         input.Item4.Length + input.Item5.Length + input.Item6.Length;
+                         input.Item4.Length + input.Item5.Length + input.Item6.Length + 1;
             string[] final = new string[length];
             int a = 0;
             for (int i = 0; i < 18; i++)
@@ -413,6 +439,10 @@ namespace Snake
             {
                 { final[a] = input.Item6[i].ToString(); a++; }
             }
+            
+            //store current Date/Time on last row
+            final[a] = DateTime.Now.ToString();
+
             File.WriteAllLines(path[number], final, Encoding.UTF8);
         }
     }

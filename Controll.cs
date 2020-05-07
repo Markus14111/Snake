@@ -91,7 +91,7 @@ namespace Snake
 
         public Position run_AI() {
 
-            int Length, move_count = 0;
+            int Length = 0, move_count = 0;
 
             while (true)
             {
@@ -114,6 +114,11 @@ namespace Snake
                 }
 
                 move_count++;
+
+                //return after termination condition
+                if (move_count > 1000)
+                    return Tuple.Create(Length, move_count);
+
 
             }
 
