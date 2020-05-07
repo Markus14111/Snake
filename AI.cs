@@ -5,6 +5,8 @@ using Dataset = System.Tuple<double[,], double[,], double[,], double[], double[]
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Text;
 
 namespace Snake
 {
@@ -16,25 +18,27 @@ namespace Snake
         private int TileAmount;
         private Network student;
         private Controll controller;
-        private int MutationRate = 5;
-        private int ClassSize = 200;
-        private int cycleSize = 200;
+        private int MutationRate = 15;
+        private int ClassSize = 500;
+        private int cycleSize = 10;
+        private string[] path = new string[3];
 
         public AI(Controll controller, int TileAmount)
         {
+            path[0] = @".\Dataset0.txt";
+            path[1] = @".\Dataset1.txt";
+            path[2] = @".\Dataset2.txt";
             this.controller = controller;
             this.TileAmount = TileAmount;
             student = new Network();
-            
         }
-
 
         public int TeacherBot(Dataset dataset)
         {
             student.setValues(dataset);
             Position Values = controller.run_AI();
 
-            int fitness = Values.Item1 + Values.Item2;
+            int fitness = Values.Item1*50 + Values.Item2;
 
             return fitness;
         }
@@ -44,12 +48,19 @@ namespace Snake
             Dataset[] Students = new Dataset[ClassSize];
             Position[] ValueIndexPair = new Position[ClassSize];
             Dataset[] Top3 = new Dataset[3];
-
+            int first = -1;
             int cycles = cycleSize;
-
-            //set Random
-            for (int i = 0; i < ClassSize; i++)
-                Students[i] = Randomize();
+            //if there is a file with saved AI load it
+            if (File.Exists(path[0]))
+            {
+                Top3 = new Dataset[3];
+                for (int i = 0; i < 3; i++)
+                    Top3[i] = ReadFromFile(i);
+                Students = BuilderBot(Top3);
+            }
+            else  //randomize
+                for (int i = 0; i < ClassSize; i++)
+                 Students[i] = Randomize();
 
             for (int i = 0; i < cycles; i++)
             {                
@@ -59,16 +70,24 @@ namespace Snake
 
                 //Sort Students
                 Array.Sort(ValueIndexPair);
+                Console.WriteLine(ValueIndexPair[ClassSize-1].Item1);
+                if (first == -1)
+                    first = ValueIndexPair[ClassSize - 1].Item1;
 
                 //Take top 3
                 Top3 = new Dataset[3];
                 for (int j = 0; j < 3; j++)
-                    Top3[j] = Students[ValueIndexPair[19 - j].Item2];
+                    Top3[j] = Students[ValueIndexPair[ClassSize - 1 - j].Item2];
 
                 //call BuilderBot
                 Students = BuilderBot(Top3);
             }
             student.setValues(Top3[0]);
+            if (TeacherBot(Top3[0]) >= first)
+                for (int i = 0; i<3; i++)
+                    WriteToFile(Top3[i], i);
+            else
+                Console.WriteLine("FAIL");
         }
 
         private Dataset Randomize()
@@ -207,12 +226,14 @@ namespace Snake
             //randomly crossbreed 2 winners
             Random rand = new Random();
             Dataset[] output = new Dataset[ClassSize];
-            for (int i = 0; i < ClassSize; i++)
+            for (int i = 3; i < ClassSize; i++)
             {
                 Dataset Child = breed(winners[rand.Next(3)], winners[rand.Next(3)]);
                 //apply mutation
                 output[i] = mutation(Child);
             }
+            for (int i = 0; i < 3; i++)
+                output[i] = winners[i];
             return output;
         }
 
@@ -330,7 +351,69 @@ namespace Snake
                 if (rand.Next(100) < MutationRate)
                     Offset2[i] = mutate(Offset2[i]);
             }
-            return Child;
+            return Tuple.Create(Weights0, Weights1, Weights2, Offset0, Offset1, Offset2);
+        }
+
+        private Dataset ReadFromFile(int number)
+        {
+            string[] reading = File.ReadAllLines(path[number], Encoding.UTF8);
+            double[,] Weights0 = new double[18, 24];
+            double[,] Weights1 = new double[18, 18];
+            double[,] Weights2 = new double[4, 18];
+            double[] Offset0 = new double[18];
+            double[] Offset1 = new double[18];
+            double[] Offset2 = new double[4];
+            int a = 0;
+            for (int i = 0; i < 18; i++)
+            {
+                //Weights0
+                for (int j = 0; j < 24; j++)
+                { Weights0[i, j] = Convert.ToDouble(reading[a]); a++; }
+                //Weights1
+                for (int j = 0; j < 18; j++)
+                { Weights1[i, j] = Convert.ToDouble(reading[a]); a++; }
+                //weights2
+                for (int j = 0; j < 4; j++)
+                { Weights2[j, i] = Convert.ToDouble(reading[a]); a++; }
+                //Offset0
+                { Offset0[i] = Convert.ToDouble(reading[a]); a++; }
+                //Offset1
+                { Offset1[i] = Convert.ToDouble(reading[a]); a++; }
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                { Offset2[i] = Convert.ToDouble(reading[a]); a++; }
+            }
+            return Tuple.Create(Weights0, Weights1, Weights2, Offset0, Offset1, Offset2);
+        }
+
+        private void WriteToFile(Dataset input,int number)
+        {
+            int length = input.Item1.Length + input.Item2.Length + input.Item3.Length +
+                         input.Item4.Length + input.Item5.Length + input.Item6.Length;
+            string[] final = new string[length];
+            int a = 0;
+            for (int i = 0; i < 18; i++)
+            {
+                //Weights0
+                for (int j = 0; j < 24; j++)
+                { final[a] = input.Item1[i, j].ToString(); a++; }
+                //Weights1
+                for (int j = 0; j < 18; j++)
+                { final[a] = input.Item2[i, j].ToString(); a++; }
+                //weights2
+                for (int j = 0; j < 4; j++)
+                { final[a] = input.Item3[j, i].ToString(); a++; }
+                //Offset0
+                { final[a] = input.Item4[i].ToString(); a++; }
+                //Offset1
+                { final[a] = input.Item5[i].ToString(); a++; }
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                { final[a] = input.Item6[i].ToString(); a++; }
+            }
+            File.WriteAllLines(path[number], final, Encoding.UTF8);
         }
     }
 }
