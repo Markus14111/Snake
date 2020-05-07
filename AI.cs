@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Windows.Forms;
 
 namespace Snake
 {
@@ -19,8 +20,8 @@ namespace Snake
         private Network student;
         private Controll controller;
         private int MutationRate = 50;
-        private int ClassSize = 20000;
-        private int cycleSize = 10;
+        private int ClassSize = 100;
+        private int cycleSize = 100;
         private int GamesPerSnake = 5;
         private string[] path = new string[10];
         private Dataset[] Top;
@@ -104,6 +105,8 @@ namespace Snake
                 Students = BuilderBot(Top);
 
                 //Console.WriteLine(i + 1);
+                for (int j = 0; j < Top.Length; j++)
+                    WriteToFile(Top[j], j);
 
             }
 
