@@ -16,8 +16,8 @@ namespace Snake
         private Controll controller;
         private Random rand = new Random();
         private int MutationRate = 5;
-        private int ClassSize = 5000;
-        private int cycleSize = 20;
+        private int ClassSize = 10000;
+        private int cycleSize = 10;
         private int GamesPerSnake = 1;
         private string[] path = new string[10];
 
@@ -60,17 +60,19 @@ namespace Snake
                 //Run and Teach
                 for (int j = 0; j < Students.Length; j++)
                 {
-                    ValueIndexPair[j] = Tuple.Create(Tuple.Create(TeacherBot(Students[j]), j).Item1, j);
+                    ValueIndexPair[j] = Tuple.Create(TeacherBot(Students[j]), j);
                 }
 
 
                 //Sort Students
                 Array.Sort(ValueIndexPair);
-                Console.WriteLine(ValueIndexPair[ClassSize-1].Item1);
+
                 winner = Students[ValueIndexPair[ClassSize-1].Item2];
 
                 //call BuilderBot
                 Students = BuilderBot(Students,ValueIndexPair);
+
+                Console.WriteLine(i + 1 + " - " + ValueIndexPair[ClassSize - 1].Item1);
             }
 
             student.setValues(winner);
