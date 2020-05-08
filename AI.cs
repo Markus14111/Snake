@@ -16,7 +16,7 @@ namespace Snake
         private Controll controller;
         private Random rand = new Random();
         private int MutationRate = 5;
-        private int ClassSize = 5000;
+        private int ClassSize = 10000;
         private int cycleSize = 10;
         private int GamesPerSnake = 1;
         private string[] path = new string[10];
@@ -138,7 +138,7 @@ namespace Snake
             for (int i = 0; i < Outputs.Length; i += 3)
             {
                 //Wall
-                Outputs[i] = DistanceToWall(Head, Direction[n]);
+                Outputs[i] = DistanceToWall(Head, Direction[n]) / TileAmount;
 
                 //Body
                 if (DistanceToBody(positions, Direction[n]) == 0)
@@ -147,10 +147,7 @@ namespace Snake
                     Outputs[i + 1] = DistanceToBody(positions, Direction[n]) / TileAmount;
 
                 //Food
-                if (DistanceToFood(Head, Direction[n], food_position) == 0)
-                    Outputs[i + 2] = 0;
-                else
-                    Outputs[i + 2] = DistanceToFood(Head, Direction[n], food_position) / TileAmount;
+                Outputs[i + 2] = DistanceToFood(Head, Direction[n], food_position);
 
                 n++;
             }
@@ -172,7 +169,7 @@ namespace Snake
                 {
                     //foound Bodypart
                     if (positions[0].Equals(positions[i]))
-                        return n;
+                        return 1;
                 }
 
             }
@@ -191,9 +188,9 @@ namespace Snake
                 if (Head.Item1 < 0 || Head.Item1 > (TileAmount - 1) || Head.Item2 < 0 || Head.Item2 > (TileAmount - 1))
                     break;
             }
-
-            return n;
-
+            if (n == 1)
+                return n;
+            return 0;
         }
         private double DistanceToFood(Position Head, Position direction, Position food_position)
         {
@@ -204,7 +201,7 @@ namespace Snake
                 n++;
                 Head = Tuple.Create(Head.Item1 + direction.Item1, Head.Item2 + direction.Item2);
                 if (Head.Item1 == food_position.Item1 && Head.Item2 == food_position.Item2)
-                    return n;
+                    return 1;
 
             }
 
