@@ -319,12 +319,9 @@ namespace Snake
         //mutates a single weight
         private double mutate(double weight)
         {
-            Random rand = new Random();
-            weight += gaussian();
-            if (weight < -1)
-                weight = -1;
-            if (weight > 1)
-                weight = 1;
+            weight += gaussian(); 
+            if (weight > 1) { weight = 1; }
+            if (weight < 0) { weight = 0; }
             return weight;
         }
         private Dataset mutation(Dataset Child)

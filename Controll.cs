@@ -125,7 +125,7 @@ namespace Snake
                 //return after termination condition
                 if (move_count > 2000)
                     return Tuple.Create(Length, move_count);
-                if (starve > 100)
+                if (starve > 50)
                     return Tuple.Create(Length, move_count);
 
             }
