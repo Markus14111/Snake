@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Drawing.Text;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-
 using Dataset = System.Tuple<double[,], double[,], double[,], double[], double[], double[]>;
 
 namespace Snake

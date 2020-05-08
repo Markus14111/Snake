@@ -1,14 +1,8 @@
 ﻿using System;
-
 using Position = System.Tuple<int, int>;
 using Dataset = System.Tuple<double[,], double[,], double[,], double[], double[], double[]>;
-using System.Runtime.InteropServices;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Text;
-using System.Windows.Forms;
-using System.Xml;
 
 namespace Snake
 {
@@ -54,7 +48,6 @@ namespace Snake
         {            
             Dataset[] Students = new Dataset[ClassSize];
             Position[] ValueIndexPair = new Position[ClassSize];
-            int first = -1;
             int cycles = cycleSize;
             Dataset winner = Students[0];
             //randomize
