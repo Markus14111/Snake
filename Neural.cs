@@ -19,7 +19,7 @@ namespace Snake
 
         //math functions missing in c#
         //dot product of weight matrix (mxn) and input vector (nx1)
-        private double[] dot(double[,] weights, double[] input)
+        private double[] Dot(double[,] weights, double[] input)
         {
             double[] output = new double[weights.GetUpperBound(0)+1];
             //make one sum per line of weights
@@ -44,7 +44,7 @@ namespace Snake
         }
 
         //applies sigmoid function to entire array
-        private double[] Sigmoid(double[] input)
+        private double[] ReLu(double[] input)
         {
             double[] output = new double[input.Length];
             for (int i = 0; i < input.Length; i++)
@@ -55,14 +55,14 @@ namespace Snake
         public int run(double[] Layer0)
         {
             //input -> layer 1
-            double[] Layer1 = dot(Weights0, Layer0);
-            Layer1 = Sigmoid(add(Layer1, Offset0));
+            double[] Layer1 = Dot(Weights0, Layer0);
+            Layer1 = ReLu(add(Layer1, Offset0));
             //Layer1 -> Layer2
-            double[] Layer2 = dot(Weights1, Layer1);
-            Layer2 = Sigmoid(add(Layer2, Offset1));
+            double[] Layer2 = Dot(Weights1, Layer1);
+            Layer2 = ReLu(add(Layer2, Offset1));
             //Layer2 -> output
-            double[] Layer3 = dot(Weights2, Layer2);
-            Layer3 = Sigmoid(add(Layer3, Offset2));
+            double[] Layer3 = Dot(Weights2, Layer2);
+            Layer3 = ReLu(add(Layer3, Offset2));
 
             int highestNeurone = -1;
             double value = -1;
@@ -74,31 +74,6 @@ namespace Snake
             return highestNeurone;
         }
 
-        private void Randomize()
-        {
-            Random rand = new Random();
-            for (int m = 0; m < Weights0.GetUpperBound(0)+1; m++)
-            {
-                for (int n = 0; n < Weights0.GetUpperBound(1) + 1; n++)
-                    Weights0[m, n] = (rand.Next(20) + 1) / 10;
-            }
-            for (int m = 0; m < Weights1.GetUpperBound(0) + 1; m++)
-            {
-                for (int n = 0; n < Weights1.GetUpperBound(1) + 1; n++)
-                    Weights1[m, n] = (rand.Next(20) + 1) / 10;
-            }
-            for (int m = 0; m < Weights2.GetUpperBound(0) + 1; m++)
-            {
-                for (int n = 0; n < Weights2.GetUpperBound(1) + 1; n++)
-                    Weights2[m, n] = (rand.Next(20) + 1) / 10;
-            }
-            for (int i = 0; i < Offset0.Length; i++)
-                Offset0[i] = (rand.Next(20) + 1) / 10;
-            for (int i = 0; i < Offset1.Length; i++)
-                Offset1[i] = (rand.Next(20) + 1) / 10;
-            for (int i = 0; i < Offset2.Length; i++)
-                Offset2[i] = (rand.Next(20) + 1) / 10;
-        }
 
         public void setValues(Dataset data)
         {
