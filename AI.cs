@@ -23,7 +23,7 @@ namespace Snake
         private Random rand = new Random();
         private int MutationRate = 5;
         private int ClassSize = 5000;
-        private int cycleSize = 10;
+        private int cycleSize = 20;
         private int GamesPerSnake = 1;
         private string[] path = new string[10];
 
@@ -239,14 +239,13 @@ namespace Snake
             //randomly crossbreed 2 winners
             Random rand = new Random();
             Dataset[] output = new Dataset[ClassSize];
-            for (int i = 10; i < ClassSize; i++)
+            for (int i = 1; i < ClassSize; i++)
             {
                 Dataset Child = breed(ChooseParent(winners, indexValuePair), ChooseParent(winners, indexValuePair));
                 //apply mutation
                 output[i] = mutation(Child);
             }
-            for (int i = 0; i < 10; i++)
-                output[i] = winners[i];
+            output[0] = winners[indexValuePair[ClassSize - 1].Item2];
             return output;
         }
 
