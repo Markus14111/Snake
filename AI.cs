@@ -8,6 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace Snake
 {
@@ -19,12 +20,12 @@ namespace Snake
         private int TileAmount;
         private Network student;
         private Controll controller;
+        private Random rand = new Random();
         private int MutationRate = 5;
         private int ClassSize = 5000;
-        private int cycleSize = 100;
+        private int cycleSize = 10;
         private int GamesPerSnake = 1;
         private string[] path = new string[10];
-        private Dataset[] Top;
 
         public AI(Controll controller, int TileAmount)
         {
@@ -36,11 +37,6 @@ namespace Snake
             student = new Network();
         }
 
-
-        public Dataset[] GetTop()
-        {
-            return Top;
-        }
         private int TeacherBot(Dataset dataset)
         {
             int fitness = 0;
@@ -58,27 +54,13 @@ namespace Snake
         {            
             Dataset[] Students = new Dataset[ClassSize];
             Position[] ValueIndexPair = new Position[ClassSize];
-            Top = new Dataset[10];
             int first = -1;
             int cycles = cycleSize;
-
-            //if there is a file with saved AI load it
-            if (File.Exists(path[0]))
-            {
-                Top = new Dataset[10];
-                for (int i = 0; i < path.Length; i++)
-                    Top[i] = ReadFromFile(i);
-                Students = BuilderBot(Top);
-                Console.WriteLine("Loaded DataSets");
-            }
-            else 
-            {
-                //randomize
-                for (int i = 0; i < ClassSize; i++)
-                    Students[i] = Randomize();
-                Console.WriteLine("Random Seed Generated");
-
-            }
+            Dataset winner = Students[0];
+            //randomize
+            for (int i = 0; i < ClassSize; i++)
+                Students[i] = Randomize();
+            Console.WriteLine("Random Seed Generated");
 
             for (int i = 0; i < cycles; i++)
             {
@@ -92,34 +74,14 @@ namespace Snake
                 //Sort Students
                 Array.Sort(ValueIndexPair);
                 Console.WriteLine(ValueIndexPair[ClassSize-1].Item1);
-
-                if (first == -1)
-                    first = ValueIndexPair[ClassSize - 1].Item1;
-
-                //Take top 3
-                Top = new Dataset[10];
-                for (int j = 0; j < 10; j++)
-                    Top[j] = Students[ValueIndexPair[ClassSize - 1 - j].Item2];
+                winner = Students[ValueIndexPair[ClassSize-1].Item2];
 
                 //call BuilderBot
-                Students = BuilderBot(Top);
-
-                //Console.WriteLine(i + 1);
-                for (int j = 0; j < Top.Length; j++)
-                    WriteToFile(Top[j], j);
-
+                Students = BuilderBot(Students,ValueIndexPair);
             }
 
-            student.setValues(Top[0]);
+            student.setValues(winner);
             
-            if (TeacherBot(Top[0]) >= first)
-            {
-                for (int i = 0; i < path.Length; i++)
-                    WriteToFile(Top[i], i);
-                Console.WriteLine("New DataSet written");
-            }                
-            else
-                Console.WriteLine("Failed Writing");
         }
 
         private Dataset Randomize()
@@ -252,15 +214,34 @@ namespace Snake
 
             return 0;
         }
-
-        private Dataset[] BuilderBot(Dataset[] winners)
+        private int totalFitness(Dataset[] students, Position[] indexValuePair)
+        {
+            int output = 0;
+            foreach (Position temp in indexValuePair)
+                output += temp.Item1;
+            return output;
+        }
+        private Dataset ChooseParent(Dataset[] students, Position[] indexValuePair)
+        {
+            int required = rand.Next(totalFitness(students, indexValuePair));
+            int Fitness = 0;
+            for (int i = 0; i < indexValuePair.Length; i++)
+            {
+                Fitness += indexValuePair[i].Item1;
+                if (Fitness > required)
+                    return students[indexValuePair[i].Item2];
+            }
+            return students[0];
+            
+        }
+        private Dataset[] BuilderBot(Dataset[] winners, Position[] indexValuePair)
         {
             //randomly crossbreed 2 winners
             Random rand = new Random();
             Dataset[] output = new Dataset[ClassSize];
             for (int i = 10; i < ClassSize; i++)
             {
-                Dataset Child = breed(winners[rand.Next(10)], winners[rand.Next(10)]);
+                Dataset Child = breed(ChooseParent(winners, indexValuePair), ChooseParent(winners, indexValuePair));
                 //apply mutation
                 output[i] = mutation(Child);
             }
@@ -330,21 +311,27 @@ namespace Snake
             return Tuple.Create(Weights0,Weights1,Weights2,Offset0,Offset1,Offset2);
         }
 
+        private double gaussian ()
+        {
+            Random rand = new Random(); //reuse this if you are generating many
+            double u1 = 1.0 - rand.NextDouble(); //uniform(0,1] random doubles
+            double u2 = 1.0 - rand.NextDouble();
+            double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) *
+                         Math.Sin(2.0 * Math.PI * u2); //random normal(0,1)
+            double randNormal =
+                         randStdNormal; //random normal(mean,stdDev^2)
+            return randNormal;
+        }
         //mutates a single weight
         private double mutate(double weight)
         {
             Random rand = new Random();
-            switch (rand.Next(3))
-            {
-                case 0:
-                    return -weight;
-                case 1:
-                    return weight + (rand.Next(2000) / 1000) - 1;
-                case 2:
-                    return weight * (rand.Next(1000) / 1000 + 0.5);
-                default:
-                    return weight;
-            }
+            weight += gaussian();
+            if (weight < -1)
+                weight = -1;
+            if (weight > 1)
+                weight = 1;
+            return weight;
         }
         private Dataset mutation(Dataset Child)
         {

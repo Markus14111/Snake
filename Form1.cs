@@ -78,10 +78,6 @@ namespace Snake
         //Closes Exe correctely 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Dataset[] LastTop = controll.GetAI().GetTop();
-            for (int i = 0; i < LastTop.Length; i++)
-                controll.GetAI().WriteToFile(LastTop[i], i);
-
             Environment.Exit(0);
         }
     }
