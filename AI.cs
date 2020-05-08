@@ -19,10 +19,10 @@ namespace Snake
         private int TileAmount;
         private Network student;
         private Controll controller;
-        private int MutationRate = 50;
-        private int ClassSize = 100;
+        private int MutationRate = 5;
+        private int ClassSize = 5000;
         private int cycleSize = 100;
-        private int GamesPerSnake = 5;
+        private int GamesPerSnake = 1;
         private string[] path = new string[10];
         private Dataset[] Top;
 

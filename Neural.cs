@@ -56,7 +56,7 @@ namespace Snake
         {
             double[] output = new double[input.Length];
             for (int i = 0; i < input.Length; i++)
-                output[i] = 1 / (1 + Math.Exp(-input[i]));
+                output[i] = Math.Max(0, input[i]);
             return output;
         }
 
