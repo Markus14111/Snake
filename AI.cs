@@ -169,7 +169,7 @@ namespace Snake
                 {
                     //foound Bodypart
                     if (positions[0].Equals(positions[i]))
-                        return 1;
+                        return n;
                 }
 
             }
@@ -186,11 +186,9 @@ namespace Snake
                 Head = Tuple.Create(Head.Item1 + direction.Item1, Head.Item2 + direction.Item2);
 
                 if (Head.Item1 < 0 || Head.Item1 > (TileAmount - 1) || Head.Item2 < 0 || Head.Item2 > (TileAmount - 1))
-                    break;
+                    return n;
             }
-            if (n == 1)
-                return n;
-            return 0;
+
         }
         private double DistanceToFood(Position Head, Position direction, Position food_position)
         {
