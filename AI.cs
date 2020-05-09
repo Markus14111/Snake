@@ -16,7 +16,7 @@ namespace Snake
         private Controll controller;
         private Random rand = new Random();
         private int MutationRate = 5;
-        private int ClassSize = 10000;
+        private int ClassSize = 5000;
         private int cycleSize = 10;
         private int GamesPerSnake = 1;
         private string[] path = new string[10];
@@ -138,16 +138,16 @@ namespace Snake
             for (int i = 0; i < Outputs.Length; i += 3)
             {
                 //Wall
-                Outputs[i] = DistanceToWall(Head, Direction[n]) / TileAmount;
+                Outputs[i + 2] = DistanceToWall(Head, Direction[n]);
 
                 //Body
                 if (DistanceToBody(positions, Direction[n]) == 0)
-                    Outputs[i + 1] = 0;
+                    Outputs[i] = 0;
                 else
-                    Outputs[i + 1] = DistanceToBody(positions, Direction[n]) / TileAmount;
+                    Outputs[i] = DistanceToBody(positions, Direction[n]);
 
-                //Food
-                Outputs[i + 2] = DistanceToFood(Head, Direction[n], food_position);
+                //Food [0;1]
+                Outputs[i + 1] = DistanceToFood(Head, Direction[n], food_position);
 
                 n++;
             }
@@ -169,7 +169,7 @@ namespace Snake
                 {
                     //foound Bodypart
                     if (positions[0].Equals(positions[i]))
-                        return n;
+                        return 1;
                 }
 
             }
@@ -186,7 +186,7 @@ namespace Snake
                 Head = Tuple.Create(Head.Item1 + direction.Item1, Head.Item2 + direction.Item2);
 
                 if (Head.Item1 < 0 || Head.Item1 > (TileAmount - 1) || Head.Item2 < 0 || Head.Item2 > (TileAmount - 1))
-                    return n;
+                    return 1 / n;
             }
 
         }
