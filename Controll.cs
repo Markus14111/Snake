@@ -95,7 +95,7 @@ namespace Snake
 
         public Position run_AI() {
 
-            int Length = 0, move_count = 0, starve = 0;
+            int move_count = 0, starve = 0;
 
             while (true)
             {
@@ -104,9 +104,8 @@ namespace Snake
                 {
                     drawing.SetLastInput(Tuple.Create(1, 0));
                     reset(0);
-                    Length = snake.GetPositions().Length - 3;
 
-                    break;
+                    return Tuple.Create(snake.GetPositions().Length - 3;, move_count);
                 }
                 //eat Food
                 if (Eaten())
@@ -124,13 +123,13 @@ namespace Snake
 
                 //return after termination condition
                 if (move_count > 5000)
-                    return Tuple.Create(Length, move_count);
+                    return Tuple.Create(snake.GetPositions().Length - 3, move_count);
                 if (starve > 150)
-                    return Tuple.Create(Length, move_count);
+                    return Tuple.Create(snake.GetPositions().Length - 3, move_count);
 
             }
 
-            return Tuple.Create(Length, move_count);
+            
 
         }
     }
