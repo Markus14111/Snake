@@ -98,24 +98,24 @@ namespace Snake
             for (int m = 0; m < Weights0.GetUpperBound(0) + 1; m++)
             {
                 for (int n = 0; n < Weights0.GetUpperBound(1) + 1; n++)
-                    Weights0[m, n] = (rand.Next(20) + 1) / 10;
+                    Weights0[m, n] = gaussian();
             }
             for (int m = 0; m < Weights1.GetUpperBound(0) + 1; m++)
             {
                 for (int n = 0; n < Weights1.GetUpperBound(1) + 1; n++)
-                    Weights1[m, n] = (rand.Next(20) + 1) / 10;
+                    Weights1[m, n] = gaussian();
             }
             for (int m = 0; m < Weights2.GetUpperBound(0) + 1; m++)
-            {
+            {      
                 for (int n = 0; n < Weights2.GetUpperBound(1) + 1; n++)
-                    Weights2[m, n] = (rand.Next(20) + 1) / 10;
+                    Weights2[m, n] = gaussian();
             }
             for (int i = 0; i < Offset0.Length; i++)
-                Offset0[i] = (rand.Next(20) + 1) / 10;
+                Offset0[i] = gaussian();
             for (int i = 0; i < Offset1.Length; i++)
-                Offset1[i] = (rand.Next(20) + 1) / 10;
+                Offset1[i] = gaussian();
             for (int i = 0; i < Offset2.Length; i++)
-                Offset2[i] = (rand.Next(20) + 1) / 10;
+                Offset2[i] = gaussian();
 
             return Tuple.Create(Weights0, Weights1, Weights2, Offset0, Offset1, Offset2);
         }
