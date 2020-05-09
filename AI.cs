@@ -1,8 +1,13 @@
 ﻿using System;
-using Position = System.Tuple<int, int>;
-using Dataset = System.Tuple<double[,], double[,], double[,], double[], double[], double[]>;
 using System.IO;
 using System.Text;
+using System.Runtime.Remoting.Lifetime;
+
+
+using Position = System.Tuple<int, int>;
+using ScorePair = System.Tuple<long, int>;
+using Dataset = System.Tuple<double[,], double[,], double[,], double[], double[], double[]>;
+
 
 namespace Snake
 {
@@ -16,8 +21,8 @@ namespace Snake
         private Controll controller;
         private Random rand = new Random();
         private int MutationRate = 5;
-        private int ClassSize = 5000;
-        private int cycleSize = 10;
+        private int ClassSize = 10000;
+        private int cycleSize = 20;
         private int GamesPerSnake = 1;
         private string[] path = new string[10];
 
@@ -31,23 +36,42 @@ namespace Snake
             student = new Network();
         }
 
-        private int TeacherBot(Dataset dataset)
+        //calculates fitness of from given results
+        private long calculateFitness(Position Values)
+        {  
+            long fitness = 0;
+            int score = Values.Item1 + 2;
+            int lifetime = Values.Item2;
+            if (score < 10)
+            {
+                fitness = lifetime * lifetime * Convert.ToInt32(Math.Pow(2, score));
+            }
+            else
+            {
+                fitness = lifetime * lifetime;
+                fitness *= Convert.ToInt32(Math.Pow(2, 10));
+                fitness *= score - 9;
+            }
+            return fitness;
+        }
+
+        private long TeacherBot(Dataset dataset)
         {
-            int fitness = 0;
+            long fitness = 0;
             student.setValues(dataset);
             //n Games per Student
             for (int k = 0; k < GamesPerSnake; k++)
             {
                 Position Values = controller.run_AI();
-                fitness += Values.Item1 * 200 + Values.Item2;
+                fitness += calculateFitness(Values);
             }
-            return Convert.ToInt32(fitness / GamesPerSnake); ;
+            return Convert.ToInt64(fitness / GamesPerSnake); ;
         }
 
         public void Learning()
         {            
             Dataset[] Students = new Dataset[ClassSize];
-            Position[] ValueIndexPair = new Position[ClassSize];
+            ScorePair[] ValueIndexPair = new ScorePair[ClassSize];
             int cycles = cycleSize;
             Dataset winner = Students[0];
             //randomize
@@ -205,17 +229,27 @@ namespace Snake
 
             return 0;
         }
-        private int totalFitness(Dataset[] students, Position[] indexValuePair)
+
+        private long randomLong(long max, long min = 0)
         {
-            int output = 0;
-            foreach (Position temp in indexValuePair)
+            //1 long has 8 bytes
+            byte[] buf = new byte[8];
+            rand.NextBytes(buf);
+            long longRand = BitConverter.ToInt64(buf, 0);
+
+            return (Math.Abs(longRand % (max - min)) + min);
+        }
+        private long totalFitness(Dataset[] students, ScorePair[] indexValuePair)
+        {
+            long output = 0;
+            foreach (ScorePair temp in indexValuePair)
                 output += temp.Item1;
             return output;
         }
-        private Dataset ChooseParent(Dataset[] students, Position[] indexValuePair)
+        private Dataset ChooseParent(Dataset[] students, ScorePair[] indexValuePair)
         {
-            int required = rand.Next(totalFitness(students, indexValuePair));
-            int Fitness = 0;
+            long required = randomLong(totalFitness(students, indexValuePair));
+            long Fitness = 0;
             for (int i = 0; i < indexValuePair.Length; i++)
             {
                 Fitness += indexValuePair[i].Item1;
@@ -225,7 +259,7 @@ namespace Snake
             return students[0];
             
         }
-        private Dataset[] BuilderBot(Dataset[] winners, Position[] indexValuePair)
+        private Dataset[] BuilderBot(Dataset[] winners, ScorePair[] indexValuePair)
         {
             //randomly crossbreed 2 winners
             Random rand = new Random();

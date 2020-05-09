@@ -43,15 +43,21 @@ namespace Snake
             return ai;
         }
 
+        private void reset()
+        {
+            snake = new Snake(drawing.GetTileamount());
+            food = new Food(drawing.GetTileamount(), snake.GetPositions());
+        }
+
         //starts new Game
         public void reset(int n)
         {
             Game_Timer.Stop();
-            util.wait(50 * n);
+            util.wait(50);
             snake = new Snake(drawing.GetTileamount());
             food = new Food(drawing.GetTileamount(), snake.GetPositions());
-            if (n == 1) { drawing.Refresh(); }
-            util.wait(100 * n);
+            drawing.Refresh();
+            util.wait(100);
             drawing.SetLastInput(Tuple.Create(1, 0));
             Game_Timer.Start();
         }
@@ -95,16 +101,14 @@ namespace Snake
 
         public Position run_AI() {
 
+            reset();
             int move_count = 0, starve = 0;
 
             while (true)
             {
                 Position move = ai.GetInput(snake.GetPositions(), food.getPosition());
                 if (!snake.move_Snake(move))
-                {
-                    drawing.SetLastInput(Tuple.Create(1, 0));
-                    reset(0);
-
+                { 
                     return Tuple.Create(snake.GetPositions().Length - 3, move_count);
                 }
                 //eat Food
