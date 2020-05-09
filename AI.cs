@@ -1,14 +1,8 @@
 ﻿using System;
-
 using Position = System.Tuple<int, int>;
 using Dataset = System.Tuple<double[,], double[,], double[,], double[], double[], double[]>;
-using System.Runtime.InteropServices;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Text;
-using System.Windows.Forms;
-using System.Xml;
 
 namespace Snake
 {
@@ -22,8 +16,8 @@ namespace Snake
         private Controll controller;
         private Random rand = new Random();
         private int MutationRate = 5;
-        private int ClassSize = 5000;
-        private int cycleSize = 20;
+        private int ClassSize = 10000;
+        private int cycleSize = 10;
         private int GamesPerSnake = 1;
         private string[] path = new string[10];
 
@@ -54,7 +48,6 @@ namespace Snake
         {            
             Dataset[] Students = new Dataset[ClassSize];
             Position[] ValueIndexPair = new Position[ClassSize];
-            int first = -1;
             int cycles = cycleSize;
             Dataset winner = Students[0];
             //randomize
@@ -67,17 +60,19 @@ namespace Snake
                 //Run and Teach
                 for (int j = 0; j < Students.Length; j++)
                 {
-                    ValueIndexPair[j] = Tuple.Create(Tuple.Create(TeacherBot(Students[j]), j).Item1, j);
+                    ValueIndexPair[j] = Tuple.Create(TeacherBot(Students[j]), j);
                 }
 
 
                 //Sort Students
                 Array.Sort(ValueIndexPair);
-                Console.WriteLine(ValueIndexPair[ClassSize-1].Item1);
+
                 winner = Students[ValueIndexPair[ClassSize-1].Item2];
 
                 //call BuilderBot
                 Students = BuilderBot(Students,ValueIndexPair);
+
+                Console.WriteLine(i + 1 + " - " + ValueIndexPair[ClassSize - 1].Item1);
             }
 
             student.setValues(winner);
@@ -152,10 +147,7 @@ namespace Snake
                     Outputs[i + 1] = DistanceToBody(positions, Direction[n]) / TileAmount;
 
                 //Food
-                if (DistanceToFood(Head, Direction[n], food_position) == 0)
-                    Outputs[i + 2] = 0;
-                else
-                    Outputs[i + 2] = DistanceToFood(Head, Direction[n], food_position) / TileAmount;
+                Outputs[i + 2] = DistanceToFood(Head, Direction[n], food_position);
 
                 n++;
             }
@@ -166,7 +158,6 @@ namespace Snake
         private double DistanceToBody(Position[] positions, Position direction)
         {
             int n = 0;
-
             //While Head is in playing Area
             while (positions[0].Item1 >= 0 && positions[0].Item1 < TileAmount && positions[0].Item2 >= 0 && positions[0].Item2 < TileAmount)
             {
@@ -178,7 +169,7 @@ namespace Snake
                 {
                     //foound Bodypart
                     if (positions[0].Equals(positions[i]))
-                        return n;
+                        return 1;
                 }
 
             }
@@ -189,26 +180,28 @@ namespace Snake
         {
             int n = 0;
 
-            //While Head is in playing Area
-            while (Head.Item1 >= 0 && Head.Item1 < TileAmount && Head.Item2 >= 0 && Head.Item2 < TileAmount)
+            while (true)
             {
                 n++;
                 Head = Tuple.Create(Head.Item1 + direction.Item1, Head.Item2 + direction.Item2);
-            }
 
-            return n;
+                if (Head.Item1 < 0 || Head.Item1 > (TileAmount - 1) || Head.Item2 < 0 || Head.Item2 > (TileAmount - 1))
+                    break;
+            }
+            if (n == 1)
+                return n;
+            return 0;
         }
         private double DistanceToFood(Position Head, Position direction, Position food_position)
         {
             int n = 0;
-
             //While Head is in playing Area
             while (Head.Item1 >= 0 && Head.Item1 < TileAmount && Head.Item2 >= 0 && Head.Item2 < TileAmount)
             {
                 n++;
                 Head = Tuple.Create(Head.Item1 + direction.Item1, Head.Item2 + direction.Item2);
-                if (Head.Equals(food_position))
-                    return n;
+                if (Head.Item1 == food_position.Item1 && Head.Item2 == food_position.Item2)
+                    return 1;
 
             }
 
@@ -324,12 +317,9 @@ namespace Snake
         //mutates a single weight
         private double mutate(double weight)
         {
-            Random rand = new Random();
-            weight += gaussian();
-            if (weight < -1)
-                weight = -1;
-            if (weight > 1)
-                weight = 1;
+            weight += gaussian(); 
+            if (weight > 1) { weight = 1; }
+            if (weight < 0) { weight = 0; }
             return weight;
         }
         private Dataset mutation(Dataset Child)
