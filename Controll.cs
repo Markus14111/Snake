@@ -105,7 +105,7 @@ namespace Snake
                     drawing.SetLastInput(Tuple.Create(1, 0));
                     reset(0);
 
-                    return Tuple.Create(snake.GetPositions().Length - 3;, move_count);
+                    return Tuple.Create(snake.GetPositions().Length - 3, move_count);
                 }
                 //eat Food
                 if (Eaten())
