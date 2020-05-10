@@ -9,6 +9,7 @@ namespace Snake
     {
         //Member Variables
         private Timer Game_Timer = new Timer();
+        private int FPS = 120;
         private Form1 drawing;
         private Food food;
         private AI ai;
@@ -28,7 +29,7 @@ namespace Snake
             ai = new AI(this, drawing.GetTileamount());
             food = new Food(drawing.GetTileamount(), snake.GetPositions(),rand);
             //Initilaze Timer
-            Game_Timer.Interval = (int)(1000 / 20);
+            Game_Timer.Interval = (int)(1000 / FPS);
             Game_Timer.Tick += new EventHandler(Tick);
             //start Timer
             Game_Timer.Enabled = true;
