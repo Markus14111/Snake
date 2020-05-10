@@ -7,7 +7,7 @@ using System.Runtime.Remoting.Lifetime;
 using Position = System.Tuple<int, int>;
 using ScorePair = System.Tuple<long, int>;
 using Dataset = System.Tuple<double[,], double[,], double[,], double[], double[], double[]>;
-
+using System.Windows.Forms;
 
 namespace Snake
 {
@@ -17,12 +17,12 @@ namespace Snake
         static Position[] Direction = { Tuple.Create(0, -1), Tuple.Create(1, 0), Tuple.Create(0, 1), Tuple.Create(-1, 0), Tuple.Create(1, -1), Tuple.Create(1, 1), Tuple.Create(-1, 1), Tuple.Create(-1, -1) };
 
         private int TileAmount;
-        private Network student;
+        private Network student,winner;
         private Controll controller;
         private Random rand = new Random();
         private int MutationRate = 5;
-        private int ClassSize = 10000;
-        private int cycleSize = 20;
+        private int ClassSize = 5000;
+        private int cycleSize = 150;
         private int GamesPerSnake = 1;
         private string[] path = new string[10];
 
@@ -34,6 +34,7 @@ namespace Snake
             this.controller = controller;
             this.TileAmount = TileAmount;
             student = new Network();
+            winner = new Network();
         }
 
         //calculates fitness of from given results
@@ -42,6 +43,8 @@ namespace Snake
             long fitness = 0;
             int score = Values.Item1 + 2;
             int lifetime = Values.Item2;
+            if (lifetime > 450)
+                lifetime = 450;
             if (score < 10)
             {
                 fitness = lifetime * lifetime * Convert.ToInt32(Math.Pow(2, score));
@@ -73,7 +76,6 @@ namespace Snake
             Dataset[] Students = new Dataset[ClassSize];
             ScorePair[] ValueIndexPair = new ScorePair[ClassSize];
             int cycles = cycleSize;
-            Dataset winner = Students[0];
             //randomize
             for (int i = 0; i < ClassSize; i++)
                 Students[i] = Randomize();
@@ -86,21 +88,24 @@ namespace Snake
                 {
                     ValueIndexPair[j] = Tuple.Create(TeacherBot(Students[j]), j);
                 }
+                while(controller.timerRunning())
+                {
+                    Application.DoEvents();
+                }
 
 
                 //Sort Students
                 Array.Sort(ValueIndexPair);
 
-                winner = Students[ValueIndexPair[ClassSize-1].Item2];
+                winner.setValues(Students[ValueIndexPair[ClassSize-1].Item2]);
 
                 //call BuilderBot
                 Students = BuilderBot(Students,ValueIndexPair);
 
                 Console.WriteLine(i + 1 + " - " + ValueIndexPair[ClassSize - 1].Item1);
-            }
-
-            student.setValues(winner);
-            
+                controller.reset();
+                controller.startTimer();
+            }   
         }
 
         private Dataset Randomize()
@@ -139,9 +144,13 @@ namespace Snake
             return Tuple.Create(Weights0, Weights1, Weights2, Offset0, Offset1, Offset2);
         }
 
-        public Position GetInput(Position[] pos, Position food_pos)
+        public Position GetInput(Position[] pos, Position food_pos,bool learn)
         {
-            int result = student.run(CreateInputs(pos, food_pos));
+            int result = 0;
+            if (learn)
+                result = student.run(CreateInputs(pos, food_pos));
+            else
+                result = winner.run(CreateInputs(pos, food_pos));
             return Direction[result];
         }
 

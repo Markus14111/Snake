@@ -7,17 +7,17 @@ namespace Snake
     {
         private Position position;
         private bool blocked = true;
-        private Random random = new Random();
 
 
 
-        public Food(int Tileamount, Position[] blockedPositions)
+        public Food(int Tileamount, Position[] blockedPositions, Random random)
         {
             while (blocked)
             {
                 position = Tuple.Create(random.Next(0, Tileamount), random.Next(0, Tileamount));
                 if (!is_blocked(position, blockedPositions)) { blocked = false; }
             }
+            
         }
 
         public Position getPosition()
@@ -36,6 +36,11 @@ namespace Snake
                 }
             }
             return false;
+        }
+
+        public override string ToString()
+        {
+            return position.Item1.ToString() + "    " + position.Item2.ToString();
         }
     }
 }
