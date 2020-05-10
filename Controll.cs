@@ -94,6 +94,7 @@ namespace Snake
                 food = new Food(drawing.GetTileamount(), snake.GetPositions(), rand);
                 starve = 0;
             }
+            drawing.Text = snake.GetPositions().Length.ToString();
             drawing.Refresh();
             if (starve > 200) { Game_Timer.Stop(); Game_Timer.Enabled = false; }
             starve++;

@@ -97,7 +97,7 @@ namespace Snake
                 //Sort Students
                 Array.Sort(ValueIndexPair);
 
-                winner.setValues(Students[ValueIndexPair[ClassSize-1].Item2]);
+                winner.setValues(Students[ValueIndexPair[ClassSize-1].Item2]);                
 
                 //call BuilderBot
                 Students = BuilderBot(Students,ValueIndexPair);
