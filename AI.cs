@@ -110,7 +110,7 @@ namespace Snake
 
         private Dataset Randomize()
         {
-            double[,] Weights0 = new double[18, 24];
+            double[,] Weights0 = new double[18, 25];
             double[,] Weights1 = new double[18, 18];
             double[,] Weights2 = new double[4, 18];
 
@@ -164,11 +164,11 @@ namespace Snake
             }
 
 
-            double[] Outputs = new double[24];
+            double[] Outputs = new double[25];
 
             //looks in 8 Direction
             int n = 0;
-            for (int i = 0; i < Outputs.Length; i += 3)
+            for (int i = 0; i < Outputs.Length - 1; i += 3)
             {
                 //Wall
                 Outputs[i + 2] = DistanceToWall(Head, Direction[n]);
@@ -184,6 +184,7 @@ namespace Snake
 
                 n++;
             }
+            Outputs[24] = (pos.Length - 3) / 100;
 
             return Outputs;
         }
@@ -202,7 +203,7 @@ namespace Snake
                 {
                     //foound Bodypart
                     if (positions[0].Equals(positions[i]))
-                        return 1;
+                        return 1 / n;
                 }
 
             }
@@ -295,7 +296,7 @@ namespace Snake
             //crossbreeds the 2 neural networks
             //randomly pick one of every neuron from either parent
             Random rand = new Random();
-            double[,] Weights0 = new double[18, 24];
+            double[,] Weights0 = new double[18, 25];
             double[,] Weights1 = new double[18, 18];
             double[,] Weights2 = new double[4, 18];
             double[] Offset0 = new double[18];
@@ -376,7 +377,7 @@ namespace Snake
             for (int i = 0; i < 18; i++)
             {
                 //Weights0
-                for (int j = 0; j < 24; j++)
+                for (int j = 0; j < 25; j++)
                     if (rand.Next(100) < MutationRate)
                         Weights0[i, j] = mutate(Weights0[i, j]);
                 //Weights1
@@ -406,7 +407,7 @@ namespace Snake
         private Dataset ReadFromFile(int number)
         {
             string[] reading = File.ReadAllLines(path[number], Encoding.UTF8);
-            double[,] Weights0 = new double[18, 24];
+            double[,] Weights0 = new double[18, 25];
             double[,] Weights1 = new double[18, 18];
             double[,] Weights2 = new double[4, 18];
             double[] Offset0 = new double[18];
@@ -416,7 +417,7 @@ namespace Snake
             for (int i = 0; i < 18; i++)
             {
                 //Weights0
-                for (int j = 0; j < 24; j++)
+                for (int j = 0; j < 25; j++)
                 { Weights0[i, j] = Convert.ToDouble(reading[a]); a++; }
                 //Weights1
                 for (int j = 0; j < 18; j++)
@@ -445,7 +446,7 @@ namespace Snake
             for (int i = 0; i < 18; i++)
             {
                 //Weights0
-                for (int j = 0; j < 24; j++)
+                for (int j = 0; j < 25; j++)
                 { final[a] = input.Item1[i, j].ToString(); a++; }
                 //Weights1
                 for (int j = 0; j < 18; j++)

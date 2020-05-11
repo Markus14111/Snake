@@ -5,7 +5,7 @@ namespace Snake
 {
     class Network
     {
-        private double[,] Weights0 = new double[18, 24];
+        private double[,] Weights0 = new double[18, 25];
         private double[,] Weights1 = new double[18, 18];
         private double[,] Weights2 = new double[4, 18];
 
