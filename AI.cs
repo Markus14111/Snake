@@ -102,7 +102,7 @@ namespace Snake
                 //call BuilderBot
                 Students = BuilderBot(Students,ValueIndexPair);
 
-                Console.WriteLine(i + 1 + " - " + ValueIndexPair[ClassSize - 1].Item1);
+                Console.WriteLine("Gen: " + (i + 1).ToString() + ", Fitness: " + ValueIndexPair[ClassSize - 1].Item1);
                 controller.reset();
                 controller.startTimer();
             }   
@@ -184,7 +184,7 @@ namespace Snake
 
                 n++;
             }
-            Outputs[24] = (pos.Length - 3) / 100;
+            Outputs[24] = (pos.Length - 3) / 50;
 
             return Outputs;
         }

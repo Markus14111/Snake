@@ -83,6 +83,7 @@ namespace Snake
             Position move = ai.GetInput(snake.GetPositions(), food.getPosition(),false);
             if (!snake.move_Snake(move))
             {
+                Console.WriteLine("Gen Highscore: " + snake.GetPositions().Length);
                 Game_Timer.Stop();
                 Game_Timer.Enabled = false;
             }
@@ -97,7 +98,7 @@ namespace Snake
             }
             drawing.Text = snake.GetPositions().Length.ToString();
             drawing.Refresh();
-            if (starve > 200) { Game_Timer.Stop(); Game_Timer.Enabled = false; }
+            if (starve > 200) { Console.WriteLine("Gen Highscore: " + snake.GetPositions().Length + " (starved.)"); ; Game_Timer.Stop(); Game_Timer.Enabled = false; }
             starve++;
         }
 
